@@ -15,9 +15,16 @@
 
 function HandleLoginResponse(response)
 {
-	var text = String(JSON.parse(response));
+	var login = String(JSON.parse(response));
 //	document.getElementById("textResponse").innerHTML = response+"<p>";	
-	document.getElementById("textResponse").innerHTML = "response: "+text+"<p>";
+	if (login == '1'){
+		window.location.href = "register.html";
+	}
+	else {
+		document.getElementById("textResponse").style.display = "block";
+}
+
+
 }
 
 
@@ -52,6 +59,12 @@ function test(username,password)
 		  </div>
 
 			  <div class = "card-body">
+
+	<div class = "text-light  bg-danger" id="textResponse" style = "display:none">
+		<p style = "margin-left:10px">Invalid Credentials<p>
+	</div>
+
+
 			<h4 class = "card-title">Login</h4>
 	 
 <form method="POST" name = "login" id="login" autocomplete = "off" action="javascript:test()">
@@ -82,8 +95,8 @@ function test(username,password)
 			  </script>
 
 <br>
-<div id="textResponse">
-lalala	<!-- shows if user entered wrong credentials -->
+<div class = "text-danger" id="textResponse">
+<!-- shows if user entered wrong credentials -->
 </div>
 <a href="register.html" class ="link-success">Not a user? Click Here to Register</a>
 
