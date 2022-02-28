@@ -13,7 +13,7 @@ echo "B"; //test echo
 //conenct and pull data from API
 //
 //
-$search = "fish";
+$search = "cats";
 $curl = curl_init();
 curl_setopt_array($curl, array(
         CURLOPT_URL =>"https://www.googleapis.com/books/v1/volumes?q=$search&key=AIzaSyDMX3vJz8MvfUAw0gomHHREUyuglJZc37Y",
