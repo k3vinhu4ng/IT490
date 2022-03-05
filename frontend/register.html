@@ -15,18 +15,23 @@
 
 function HandleLoginResponse(response)
 {
-	var login = String(JSON.parse(response));
-//	document.getElementById("textResponse").innerHTML = response+"<p>";	
-	if (login == '1'){
-		window.location.href = "home.html";
-	}
-	else {
-		document.getElementById("textResponse").style.display = "block";
+
+       var login = String(JSON.parse(response));
+//      document.getElementById("textResponse").innerHTML = response+"<p>";     
+        if (login == '1'){
+		alert("Account Created.");
+                window.location.href = "index.html";
+        }
+        else {
+                document.getElementById("textResponse").style.display = "block";
 }
 
 
-}
 
+
+
+
+}
 
 function test(username,password)
 {
@@ -46,6 +51,37 @@ function test(username,password)
 	request.send("type=login&username="+username+"&password="+password);
 }
 
+
+function CreateUser(username,password)
+{
+	var request = new XMLHttpRequest();
+	request.open("POST","register.php",true);
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	request.onreadystatechange= function ()
+	{
+		
+		if ((this.readyState == 4)&&(this.status == 200))
+		{
+			HandleLoginResponse(this.responseText);
+		}		
+	}
+	
+	var username = document.getElementById("username").value;
+	var password = document.getElementById("password").value;
+	var password2 = document.getElementById("password2").value;
+
+	if (username ==''){
+	alert("Please enter a User Name.");
+	return;
+	}
+	if (password !== password2){
+	alert("Password did not confirm");
+	return;
+	}
+
+	
+	request.send("type=new&username="+username+"&password="+password);
+}
 </script>
 
 	
@@ -54,52 +90,58 @@ function test(username,password)
 
 	  <br><br>
 	  <div class = "card" style="width: 20rem;">   
-		  <div class = "card-header bg-success text-light">
-		 Welcome To Book Rex.
+		  <div class = "card-header bg-danger text-light">
+		 Register
 		  </div>
 
-			  <div class = "card-body">
 
-	<div class = "text-light  bg-danger" id="textResponse" style = "display:none">
-		<p style = "margin-left:10px">Invalid Credentials<p>
-	</div>
+		  <div class = "card-body">
+			 
 
 
-			<h4 class = "card-title">Login</h4>
-	 
-<form method="POST" name = "login" id="login" autocomplete = "off" action="javascript:test()">
+        <div class = "text-light  bg-danger" id="textResponse" style = "display:none">
+                <p style = "margin-left:10px">User Name already exists.<p>
+        </div>
+
+
+
+
+<form method="POST" name = "register" id="register" autocomplete = "off" action="javascript:CreateUser()">
 <div class = "form-group">
 
 	<input type="text" class = "form-control" id="username" name="username" placeholder="User Name">
 	
 	<br>
 	<input type="password" class = "form-control" id="password" name="password" placeholder="Password"> 
-  <input type = "checkbox" onclick="F()"> Show Password </div>
+  <input type="password" class = "form-control" id="password2" name="password2" placeholder="Confirm Password">
+
+	<input type = "checkbox" onclick="F()"> Show Password </div>
 <br> <div class ="form-group">
-  <button type = "submit" class = "btn btn-success">Login</button>
+  <button type = "submit" class = "btn btn-danger">Register</button>
 </form>
 			  </div>
 
 			  <script>
 				  function F(){
 					  var ptrPassword = document.getElementById("password");
+					  var ptrPassword2 = document.getElementById("password2");
 					  if (ptrPassword.type === "password")
 					  {
 						  ptrPassword.type = "text";
+						  ptrPassword2.type = "text";
 					  }
 					  else {
 						  ptrPassword.type = "password";
+						  ptrPassword2.type = "password";
 					  	}
 				  }
 
 			  </script>
 
 <br>
-<div class = "text-danger" id="textResponse">
-<!-- shows if user entered wrong credentials -->
+<div id="textResponse">
+	<!-- shows if user entered wrong credentials -->
 </div>
-<a href="register.html" class ="link-success">Not a user? Click Here to Register</a>
-
 
 
 

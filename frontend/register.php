@@ -20,10 +20,11 @@ switch ($request["type"])
 //		$response = $client->send_request($request);
 	//	$response = $client->publish($request);
 	
-	case "search":
+	case "new":
 		$client = new rabbitMQClient("sampleClient.ini","testServer");
 		$response = $client->send_request($request);
 	
+
 	break;
 }
 

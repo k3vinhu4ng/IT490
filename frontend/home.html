@@ -13,13 +13,98 @@
 
 <script>
 
+
+
+
+
+//$("button").click(function()
+//	{
+//	var fired_button = $(this.val);
+//	alert(fired_button);
+//	});
+
+
+function AddBook(book_id)
+{
+	//alert(book_id.value);
+        var request = new XMLHttpRequest();
+        request.open("POST","addbook.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+       request.onreadystatechange= function ()
+        {
+                
+                if ((this.readyState == 4)&&(this.status == 200))
+                {
+                       	//DisplayBooks(this.responseText);
+			alert("books added.");
+                }               
+        }
+		
+	book = book_id.value;
+	book_data = String(book_id.data-book['title']);
+	//book_data = JSON.stringify(book_id.data-book);
+	//var book_data = document.getElementById(book_id.value).data-book;
+	request.send("type=add&bookid="+book+"&bookdata="+book_data);
+
+
+
+
+
+
+}
+	
 function DisplayBooks(response)
 {
 	var response = JSON.parse(response);
 //	document.getElementById("textResponse").innerHTML = response+"<p>";	
-	document.getElementById("textResponse").innerHTML = response;
+//	document.getElementById("textResponse").innerHTML = response['items'][0]['volumeInfo']['description'];
+
+//	data = response;
+
+	data = response['items'];
+
+//	output = String(data);
+//	document.getElementById("textResponse").innerHTML = output;
+	document.getElementById("textResponse").innerHTML = "";
+	for (var key in data) {
+		book = data[key]['volumeInfo'];
+		//title = data[key]['volumeInfo']['title'];
+		book_id = String(data[key]['id']);
+
+		title = book['title'];
+		description = book['description'];
+		
+		
+		author = book['author'];
+
+		sub_title = book['subtitle'];
+		image = book['imageLinks']['thumbnail'];
+
+		//need ID and to a variable to hold book json data. 
+		// json data would be data = data[key]
+		//pass data[key] through if user wants to add book to bookshelf
+		//need to check book ID with key in bookshelf to see if they match.
 
 
+		//output = book_info['title'];
+		 document.getElementById("textResponse").innerHTML +=
+			"<div class = 'row'> <div class = 'col-sm-3'>"
+			+"<img class = 'card-img-top' src ='"+image+"'><br><br>"
+			+ "<center><form method='post' action='javascript:AddBook("+book_id+")'>"
+			+"<input type = 'hidden' data-book= '"+book+"'id ='"+book_id+"' value = '"+book_id+"'></input>"
+
+			+"<button type='submit'"+
+			"value='" + title +"'class = 'btn btn-success'>Add To Book Shelf</button></form></center></div>"
+			+"<div class = 'col-sm-9'> <h1> "+ title + "</h1>"
+
+			+ "<p>"
+			+ description + "</p><br>"
+			+ book_id + "<br>"
+			+"</div></div><hr>";
+		
+
+		}
+	//document.getElementById("textResponse").innerHTML = book_info;
 
 }
 
@@ -27,7 +112,7 @@ function DisplayBooks(response)
 
 
 
-function search(username,password)
+function search()
 {
 	var request = new XMLHttpRequest();
 	request.open("POST","search.php",true);
@@ -78,7 +163,6 @@ function search(username,password)
 
 <br>
 <div id="textResponse">
-Awaiting Response
 </div>
 
 
