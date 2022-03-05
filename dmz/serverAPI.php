@@ -26,7 +26,11 @@ function requestProcessor($request)
   switch ($request['type'])
   {
     case "search":
-	echo "search received";
+	//echo "search received";
+	$term = $request['search'];
+	//echo $term;
+
+
 	$safe = urlencode($request['search']);
 	$data = search($safe);
 	$jdata = json_decode($data, true);
@@ -41,13 +45,15 @@ function requestProcessor($request)
 //	return $response;
 	
 	//return $jdata['items'][0]['volumeInfo']['title'];
+//	echo $jdata['items'];
+	//return $jdata['items'];
 	return $jdata;
 
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
 
-$server = new rabbitMQServer("testRabbitMQ.ini","testServer");
+$server = new rabbitMQServer("api.ini","apiServer");
 
 $server->process_requests('requestProcessor');
 exit();
