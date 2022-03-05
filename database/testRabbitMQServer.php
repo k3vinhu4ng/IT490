@@ -14,6 +14,30 @@ function doLogin($username,$password)
     //return false if not valid
 }
 
+
+function createLogin($username,$password)
+{
+    // lookup username in databas
+    // check password
+    $login = new loginDB();
+    return $login->CreateUser($username,$password);
+    //return false if not valid
+}
+
+
+function checkSearch($search)
+{
+    // lookup search query in database
+    // 
+    $login = new loginDB();
+    return $login->SearchQUery($search);
+    //return false if not valid
+}
+
+
+
+
+
 function requestProcessor($request)
 {
   echo "received request".PHP_EOL;
@@ -27,7 +51,14 @@ function requestProcessor($request)
     case "login":
       return doLogin($request['username'],$request['password']);
     case "validate_session":
-      return doValidate($request['sessionId']);
+	return doValidate($request['sessionId']);
+    case "new":
+	 return createLogin($request['username'],$request['password']);
+    case "search":
+	return checkSearch($request['search']);
+	//echo "received search request term";
+
+
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
