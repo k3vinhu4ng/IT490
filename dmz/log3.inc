@@ -6,41 +6,27 @@ require_once('path.inc');
     require_once('get_host_info.inc');
     require_once('rabbitMQLib.inc');
 
+error_reporting(E_ALL);
 
-    $file = fopen("log.txt","r");
-//      $error = fgets($file);
-       $errorArray = [];
-        while(! feof($file)){
-            array_push($errorArray, fgets($file));
-        }
-/*
-        fclose($file);
-        //      for($x=0; $x<count($errorArray); $x++)
-        //      
-//        echo $errorArray[0];
+   ini_set('display_errors', 'Off');
+   ini_set('log_errors', 1);
 
-        $fp = fopen("logHistory.txt", "a");
-        for($x = 0; $x < count($errorArray); $x++){
-            fwrite($fp, $errorArray[$x]);
-*/
-      //  file_put_contents("log.txt", "");
-//}
+    
+ini_set('error_log', 'log.txt');
+function logClient($error){
 
-$request = array();
-$request['type'] = "dmz";
-//for($x = 0; $x < count($errorArray); $x++){
-        $request['error_string'] = $errorArray;
-//}
-
-       // $request['error_string'] = $errorArray[0];
-
-//function logClient($request){  
+    //make a function that takes a log message as the parameter
+    //create the client to the logging RMQ server
+    //PUBLISH the log message
+    //grab some coffee and relax
         $client = new rabbitMQClient("log.ini", "testServer");
        echo 'test';
 
-        $response = $client->publish($request);
+        $response = $client->publish($error);
         return $response;
 
-//}
+}
+
+logClient('error');
 ?>
 
