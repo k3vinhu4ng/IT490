@@ -18,7 +18,7 @@ function HandleLoginResponse(response)
 	var login = String(JSON.parse(response));
 //	document.getElementById("textResponse").innerHTML = response+"<p>";	
 	if (login == '1'){
-		window.location.href = "register.html";
+		window.location.href = "home.html";
 	}
 	else {
 		document.getElementById("textResponse").style.display = "block";
@@ -126,5 +126,3 @@ function test(username,password)
     -->
   </body>
 </html>
-
-
