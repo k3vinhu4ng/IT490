@@ -14,17 +14,10 @@ $request = $_POST;
 $response = "unsupported request type, politely FUCK OFF";
 switch ($request["type"])
 {
-	case "login":
-		//$response = "login, yeah we can do that";
+	case "bookshelf":
 		$client = new rabbitMQClient("sampleClient.ini","testServer");
 		$response = $client->send_request($request);
-	//	$response = $client->publish($request);
-	
-//	case "new":
-//		$client = new rabbitMQClient("sampleClient.ini","testServer");
-//		$response = $client->send_request($request);
-	
-
+		unset($client);
 	break;
 }
 

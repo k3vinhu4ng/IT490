@@ -69,33 +69,37 @@ public function searchQuery($search)
 	$checksearch = $this->logindb->query($check);
 
 	if(mysqli_num_rows($checksearch) == 0) {
-		//	echo "contacting api";
+		echo "contacting api".PHP_EOL;
+		
+		$client = new rabbitMQClient("api.ini","apiServer");
+
+		
 		$request = array();
 		$request["type"] = "search";
 		$request["search"] = $search_term;
-
-		$client = new rabbitMQClient("api.ini","apiServer");
+		
 		$response = $client->send_request($request);
 		//$response = $client->publish($request);		
-
+		unset($client);	
+		//$close = $client->disconnect();
 
 		$data = json_encode($response);
 		
-		echo "contacting api";
+		echo "data got from api".PHP_EOL;
 		//echo $data;	
 		$data2 = $this->logindb->real_escape_string($data);
 		$insert = "insert into SEARCH values('$search', '$data2');";
-		//$insert = "insert in SEARCH (SEARCH_QUERY, RESULT) values ('test2', '{\"name\":\"2\"}');";
-		//$insert = "insert into test values('lalalala')";
-
+			
 
 		$sql_action = $this->logindb->query($insert);
+
+		echo "api data stored in database".PHP_EOL;
 		return $response;
 		//return 1;
 
 	}
 	else{
-		echo "accessing database for book records";
+		echo "accessing database for book records".PHP_EOL;
 		$rows = array();
 		while ($r = mysqli_fetch_array($checksearch))
 		{
@@ -107,6 +111,60 @@ public function searchQuery($search)
 		//return 0;
 	}
 }
+
+
+public function db_add_book($username,$book_id, $book_data)
+{
+	$un = $this->logindb->real_escape_string($username);
+	$book_id = $this->logindb->real_escape_string($book_id);
+	$data = $this->logindb->real_escape_string($book_data);
+	
+	
+	$check = "select * from BOOKSHELF where userid = '$un' and BOOK_ID ='$book_id';";
+	$checkbook = $this->logindb->query($check);
+
+	if(mysqli_num_rows($checkbook) == 0) {
+		echo "not in bookshelf".PHP_EOL;
+		$insert = "insert into BOOKSHELF values('$un', '$book_id', '$data');";
+		$action = $this->logindb->query($insert);
+		echo mysqli_errno($this->logindb).PHP_EOL;
+		echo "0 = successfully added".PHP_EOL;
+		return 1;
+	}
+	else{
+		echo "book exists in bookshelf";
+		return 0;
+	}
+}
+
+
+public function bookshelf($username)
+{
+	$un = $this->logindb->real_escape_string($username);
+	
+	
+	$check = "select * from BOOKSHELF where userid = '$un';";
+	$checkbook = $this->logindb->query($check);
+	//echo mysql_fetch_array($checkbook);
+	//return mysql_fetch_array($checkbook);
+
+	//$bookshelf = array();
+
+	//while ($row = mysql
+	$result = array();
+
+	while($row = mysqli_fetch_array($checkbook))
+	{
+		
+		//echo $row['BOOK'].PHP_EOL;
+		array_push($result, $row['BOOK']);	
+	
+	}
+	//echo implode("|", $result);
+	//echo "returning json encoded results".PHP_EOL;
+	return $result;
+}
+
 
 
 
