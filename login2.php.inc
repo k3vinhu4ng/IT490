@@ -6,7 +6,7 @@ private $logindb;
 
 public function __construct()
 {
-	$this->logindb = new mysqli("127.0.0.1","usertest","password","testdb");
+	$this->logindb = new mysqli("127.0.0.1","test","test","bookrex");
 
 	if ($this->logindb->connect_errno != 0)
 	{
@@ -40,10 +40,17 @@ public function storeHash($username)
 {
 
         $un = $this->logindb->real_escape_string($username);
-        $hasht = $this->hashTime();
+	$hasht = $this->hashTime();
 
-        $ins = "insert into usersessions values ('$un','$hasht');";
-        $response = $this->logindb->query($ins);
+	$sel = "select * from usersessions where userid='$un';";
+	$selq = $this->logindb->query($sel);
+	$ins = "insert into usersessions values ('$un','$hasht');";
+	
+	if(mysqli_num_rows($selq) == 0) {
+		echo "session stored.";
+		$response = $this->logindb->query($ins);
+		return 1;
+	}
 }
 
 
@@ -51,7 +58,7 @@ public function validateLogin($username,$password)
 {
 	$un = $this->logindb->real_escape_string($username);
 	$pw = $this->logindb->real_escape_string($password);
-	$statement = "select * from users where username = '$un'";
+	$statement = "select * from users where userid = '$un'";
 	$response = $this->logindb->query($statement);
 
 	$hasht = $this->hashTime();
@@ -81,7 +88,7 @@ public function createLogin($username,$password)
 {
         $un = $this->logindb->real_escape_string($username);
         $pw = $this->logindb->real_escape_string($password);
-	$sel = "select * from users where username = '$un';";
+	$sel = "select * from users where userid = '$un';";
 	$selquery = $this->logindb->query($sel);
 	$ins = "insert into users values('$un','$pw');";
 
@@ -104,7 +111,7 @@ public function createLogin($username,$password)
 public function logOutUser($username){
 
 	$un = $this->logindb->real_escape_string($username);
-	$stmt = "delete from usersessions where username = '$un';";
+	$stmt = "delete from usersessions where userid = '$un';";
 	$response = $this->logindb->query($stmt);
 	return 1;
 
