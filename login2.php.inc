@@ -140,6 +140,26 @@ public function setGoals($goals)
 	//}
 }
 
+public function likeBook($username,$book_id, $liked)
+{
+
+	$un = $this->logindb->real_escape_string($username);
+	$book_id = $this->logindb->real_escape_string($book_id);
+	$li = $this->logindb->real_escape_string($liked);
+
+	//select where user and book equals this then
+	$sel = "select * from BOOKSHELF where userid='$un' and BOOK_ID='$book_id';";
+	$selq = $this->logindb->query($sel);
+	while ($row = $selq->fetch_assoc()){
+		//like column not made yet; need to alter table
+		$ins = "insert into BOOKSHELF(like) values('$li');";
+		$response = $this->logindb->query($ins);
+		return 1;
+	}
+	//while fetching row 
+	//insert into BOOKSHELF value liked blah blah blah
+	
+
 }
 
 ?>
