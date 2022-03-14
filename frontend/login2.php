@@ -18,11 +18,11 @@ switch ($request["type"])
 		//$response = "login, yeah we can do that";
 		$client = new rabbitMQClient("sampleClient.ini","testServer");
 		$response = $client->send_request($request);
-		$response = $client->publish($request);
+	//	$response = $client->publish($request);
 	
-	case "new":
-		$client = new rabbitMQClient("sampleClient.ini","testServer");
-		$response = $client->send_request($request);
+//	case "new":
+//		$client = new rabbitMQClient("sampleClient.ini","testServer");
+//		$response = $client->send_request($request);
 	
 
 	break;
