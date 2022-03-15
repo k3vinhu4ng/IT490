@@ -17,7 +17,7 @@ ini_set('error_log', 'log.txt');
 function logfunction($request){
 
 	$fp = fopen("logHistory.txt", "a");
-	file_put_contents("logHistory.txt", $request);
+	file_put_contents("logHistory.txt", $request, FILE_APPEND);
 	//	fwrite($fp, $request);
 	fclose($fp);
 }
