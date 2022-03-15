@@ -54,8 +54,9 @@ function goals()
 
                 }               
         }
+	user = sessionStorage.getItem("username");
         var goals = document.getElementById("goals").value;
-        request.send("type=goals&goals="+goals);
+        request.send("type=goals&goals="+goals+"&user="+user);
 }
 
 //var redirect = function(){

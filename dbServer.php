@@ -34,9 +34,9 @@ function logOutUser($username)
 	return $login->logOutUser($username);
 }
 
-function setGoals($goals){
+function setGoals($goals, $username){
 	$login = new loginDB();
-	return $login->setGoals($goals);
+	return $login->setGoals($goals, $username);
 }
 
 function requestProcessor($request)
@@ -56,7 +56,7 @@ function requestProcessor($request)
 	    return createLogin($request['username'],$request['password']);
 	    break;
     case "goals":
-	    return setGoals($request['goals']);
+	    return setGoals($request['goals'], $request['username']);
 	    break;
     case "logout":
 	    return logOutUser($request['username']);
