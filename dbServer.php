@@ -56,7 +56,7 @@ function requestProcessor($request)
 	    return createLogin($request['username'],$request['password']);
 	    break;
     case "goals":
-	    return setGoals($request['goals'], $request['username']);
+	    return setGoals($request['goals'], $request['user']);
 	    break;
     case "logout":
 	    return logOutUser($request['username']);
