@@ -16,6 +16,75 @@ public function __construct()
 	echo "correctly connected to database".PHP_EOL;
 }
 
+
+
+
+
+public function hashTime()
+{
+
+        $t = date("Y-m-d h:i:sa");
+        $ht = sha1($t);
+
+        return $ht;
+
+}
+
+
+
+public function storeHash($username)
+{
+
+        $un = $this->logindb->real_escape_string($username);
+	$hasht = $this->hashTime();
+
+	$sel = "select * from usersessions where userid='$un';";
+	$selq = $this->logindb->query($sel);
+	$ins = "insert into usersessions values ('$un','$hasht');";
+	
+	if(mysqli_num_rows($selq) == 0) {
+		echo "session stored.";
+		$response = $this->logindb->query($ins);
+		return 1;
+	}
+}
+
+
+public function deleteSession($username)
+{
+
+	$un = $this->logindb->real_escape_string($username);
+	$statement = "delete from SESSIONS where userid = '$un';";
+	$response = $this->logindb->query($statement);
+
+
+}
+
+
+public function validateSession($username, $sessionID)
+{
+	$un = $this->logindb->real_escape_string($username);
+	$statement = "select * from SESSIONS where userid = '$un' and sessionID = '$sessionID';";
+	$response = $this->logindb->query($statement);
+
+
+	 while ($row = $response->fetch_assoc())
+	{
+		if($row['sessionID'] == $sessionID)
+		{
+		return 1;
+		}
+		else
+		{
+		return 0;
+		}
+
+	}
+
+}
+
+
+
 public function validateLogin($username,$password)
 {
 	$un = $this->logindb->real_escape_string($username);
@@ -29,7 +98,24 @@ public function validateLogin($username,$password)
 		if ($row["password"] == $pw)
 		{
 			echo "passwords match for $username".PHP_EOL;
-			return 1;// password match value
+
+			//code for creating and inserting sessionID
+			//return sessionID variable in array with 1
+
+			$result = array();
+			$sessionID = $this->hashTime();
+			echo $sessionID.PHP_EOL;
+			
+			$session_statement = "insert into SESSIONS(userid, sessionID) values('$username', '$sessionID');";
+			//echo $session_statement.PHP_EOL;
+			$sql_action = $this->logindb->query($session_statement);
+			echo "SQL CODE: ";
+			echo mysqli_errno($this->logindb).PHP_EOL;
+			array_push($result, $username, $sessionID);
+			//echo implode("|", $result);
+
+
+			return $result;// password match value
 		}
 		echo "passwords did not match for $username".PHP_EOL;
 	}
@@ -66,6 +152,9 @@ public function searchQuery($search)
 
 	
 	$check = "select * from SEARCH where SEARCH_QUERY = '$search_term' limit 1;";
+	echo "SQL SELECT Code Error: ";
+	echo mysqli_errno($this->logindb).PHP_EOL;
+
 	$checksearch = $this->logindb->query($check);
 
 	if(mysqli_num_rows($checksearch) == 0) {
@@ -80,6 +169,7 @@ public function searchQuery($search)
 		
 		$response = $client->send_request($request);
 		//$response = $client->publish($request);		
+		
 		unset($client);	
 		//$close = $client->disconnect();
 
@@ -92,6 +182,9 @@ public function searchQuery($search)
 			
 
 		$sql_action = $this->logindb->query($insert);
+		echo "SQL INSERT :";
+
+		echo mysqli_errno($this->logindb).PHP_EOL;
 
 		echo "api data stored in database".PHP_EOL;
 		return $response;

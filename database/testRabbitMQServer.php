@@ -55,6 +55,20 @@ function showBookShelf($username)
 
 
 
+function logoutUser($username)
+{
+	$login = new loginDB();
+	return $login->deleteSession($username);
+}
+
+
+function doValidate($username, $sessionID)
+{
+	$login = new loginDB();
+	return $login->validateSession($username, $sessionID);
+
+}
+
 
 function requestProcessor($request)
 {
@@ -68,29 +82,36 @@ function requestProcessor($request)
   {
     case "login":
 	    return doLogin($request['username'],$request['password']);
+	    break;
     case "validate_session":
-	    return doValidate($request['sessionId']);
+	    return doValidate($request['user'],$request['sessionID']);
+	    //echo "hello".PHP_EOL;
+	    break;
     case "new":
 	    return createLogin($request['username'],$request['password']);
+	    break;
     case "search":
-	//echo "running once".PHP_EOL;
-	return checkSearch($request['search']);
-	break;
-	//echo "received search request term";
+	    //echo "running once".PHP_EOL;
+	    return checkSearch($request['search']);
+	    break;
+	    //echo "received search request term";
     case "add":
-	 //echo $request["bookdata"];
-	return addBook($request['user'],$request['bookid'],$request['bookdata']);
-	break;
+	    //echo $request["bookdata"];
+	    return addBook($request['user'],$request['bookid'],$request['bookdata']);
+	    break;
     case "bookshelf":
-	return showBookshelf($request['user']);
+	    return showBookshelf($request['user']);
+    case "logout":
+	    return logoutUser($request['user']);
 
   }
-  return array("returnCode" => '0', 'message'=>"Server received request and processed");
+  //return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
 
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
 
 $server->process_requests('requestProcessor');
+unset($server);
 exit();
 ?>
 
