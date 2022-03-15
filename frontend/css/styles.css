@@ -4,4 +4,9 @@
 a.navbar-brand{
         font-size: 25px;
 }
-
+label{
+        display: block;
+}
+input, label{
+        margin: .4rem 0;
+}
