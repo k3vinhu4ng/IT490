@@ -4,6 +4,8 @@ require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 require_once('login.php.inc');
+//include('login.php.inc');
+
 
 function doLogin($username,$password)
 {
@@ -36,6 +38,22 @@ function checkSearch($search)
 
 
 
+function addBook($username, $book_id, $book_data)
+{
+    // lookup search query in database
+    // 
+    $login = new loginDB();
+    return $login->db_add_book($username, $book_id, $book_data);
+    //return false if not valid
+}
+
+function showBookShelf($username)
+{
+	$login = new loginDB();
+	return $login->bookshelf($username);
+}
+
+
 
 
 function requestProcessor($request)
@@ -49,15 +67,22 @@ function requestProcessor($request)
   switch ($request['type'])
   {
     case "login":
-      return doLogin($request['username'],$request['password']);
+	    return doLogin($request['username'],$request['password']);
     case "validate_session":
-	return doValidate($request['sessionId']);
+	    return doValidate($request['sessionId']);
     case "new":
-	 return createLogin($request['username'],$request['password']);
+	    return createLogin($request['username'],$request['password']);
     case "search":
+	//echo "running once".PHP_EOL;
 	return checkSearch($request['search']);
+	break;
 	//echo "received search request term";
-
+    case "add":
+	 //echo $request["bookdata"];
+	return addBook($request['user'],$request['bookid'],$request['bookdata']);
+	break;
+    case "bookshelf":
+	return showBookshelf($request['user']);
 
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
