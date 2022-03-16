@@ -120,6 +120,24 @@ public function logOutUser($username){
 
 // make a function that takes timestamp and hashes it
 
+public function checkGoals($user) {
+
+	$un = $this->logindb->real_escape_string($user);
+	$sel = "select * from bookgoals where username = '$un';";
+	$selquery = $this->logindb->query($sel); 
+
+	if(mysqli_num_rows($selquery) == 0) {
+		echo "user does not have reading goal set.";
+		return 0;
+	}
+
+	else {
+		echo "user has a reading goal set.";
+		return 1;
+	}
+
+}
+
 public function setGoals($goals,$user)
 {
 	$un = $this->logindb->real_escape_string($user);
@@ -131,7 +149,7 @@ public function setGoals($goals,$user)
 	//$rep = "replace into bookgoals(username, numgoals) values('$un','$goal');";
 	$up = "update bookgoals set numgoal='$goal' where username='$un';";
 
-
+ 
 	if(mysqli_num_rows($selquery) == 0) {
 		echo "reading goal set!";
 		$response = $this->logindb->query($ins);
