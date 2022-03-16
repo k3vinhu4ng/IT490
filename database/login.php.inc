@@ -61,6 +61,78 @@ public function deleteSession($username)
 }
 
 
+public function setGoals($user, $goals)
+{
+	$un = $this->logindb->real_escape_string($user);
+	//$goal = $this->logindb->real_escape_string($goals);
+	$sel = "select * from GOALS where userid = '$un';";
+	$selquery = $this->logindb->query($sel);
+	echo "SQL CODE: ";
+        echo mysqli_errno($this->logindb).PHP_EOL;
+	
+
+	//$rep = "replace into bookgoals values('$un','$goal');";
+
+	if(mysqli_num_rows($selquery) == 0) {
+		
+		echo "User has no previous goal!".PHP_EOL;
+		$ins = "insert into GOALS values('$un',$goals);";
+		$sql_action = $this->logindb->query($ins);
+	
+		echo "SQL CODE: ";
+	        echo mysqli_errno($this->logindb).PHP_EOL;
+
+		return 1;
+	}
+	if(mysqli_num_rows($selquery) == 1)
+	{
+		echo "User has previous goals. Will update".PHP_EOL;
+		$update = "update GOALS set goals = $goals where userid = '$un';";
+		$sql_action = $this->logindb->query($update);
+
+		echo "SQL CODE: ";
+       		 echo mysqli_errno($this->logindb).PHP_EOL;
+	
+
+		return 1;
+	}
+}
+
+
+
+public function getReadingGoal($username)
+{
+	$un = $this->logindb->real_escape_string($username);
+	$select = "select goals from GOALS where userid = '$un' LIMIT 1;";
+	
+	echo "Fetching user reading goals".PHP_EOL;
+	$sql_action = $this->logindb->query($select);
+
+        echo "SQL CODE: ";
+        echo mysqli_errno($this->logindb).PHP_EOL;
+
+	if(mysqli_num_rows($sql_action) == 0) {
+
+                echo "User has no reading goals yet.".PHP_EOL;
+            
+                return 0;
+        }
+	
+        if(mysqli_num_rows($sql_action) == 1) {
+
+                echo "Got user reading goals.".PHP_EOL;
+		$row = mysqli_fetch_array($sql_action);
+		$result = $row['goals'];
+		//$data = array($result, '1');
+		echo $result.PHP_EOL;	
+		//$answer = json_encode($result);
+		return $result;
+
+	}
+
+}
+
+
 public function validateSession($username, $sessionID)
 {
 	$un = $this->logindb->real_escape_string($username);
