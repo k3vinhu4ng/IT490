@@ -21,13 +21,13 @@ switch ($request["type"])
         //      $response = $client->publish($request);
 
         case "goals":
-                $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+                $client = new rabbitMQClient("sampleClient.ini","testServer");
                 $response = $client->send_request($request);
 
         break;
 }
 
-
+echo json_encode($response);
 exit(0);
 
-
+?>
