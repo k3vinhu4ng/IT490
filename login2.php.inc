@@ -127,19 +127,25 @@ public function setGoals($goals,$user)
 	$sel = "select * from bookgoals where username = '$un';";
 	$selquery = $this->logindb->query($sel);
 	// if selq == 0 then insert blah blah blah
-	$ins = "insert into bookgoals values('$un','$goals');";
-	//$rep = "replace into bookgoals values('$un','$goal');";
+	$ins = "insert into bookgoals values('$un','$goal');";
+	//$rep = "replace into bookgoals(username, numgoals) values('$un','$goal');";
+	$up = "update bookgoals set numgoal='$goal' where username='$un';";
 
-	//if(mysqli_num_rows($selquery) == 0) {
+
+	if(mysqli_num_rows($selquery) == 0) {
 		echo "reading goal set!";
 		$response = $this->logindb->query($ins);
 		return 1;
-	//}
-	//else {
-	//	echo "new reading goal set!";
-	//	$response = $this->logindb->query($rep);
-	//	return 1;
-	//}
+	}
+	else {
+		echo "new reading goal set!";
+		//$up = "update bookgoals set numgoals = '$goal' where username = '$un';";
+		$response = $this->logindb->query($up);
+		return 1;
+	}
+
+	return 0;
+
 }
 
 public function likeBook($username,$book_id, $liked)
