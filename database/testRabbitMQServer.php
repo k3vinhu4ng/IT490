@@ -70,6 +70,22 @@ function doValidate($username, $sessionID)
 }
 
 
+
+function setGoals($username, $goals){
+	$login = new loginDB();
+	return $login->setGoals($username, $goals);
+}
+
+
+
+function showGoals($username){
+	$login = new loginDB();
+	return $login->getReadingGoal($username);
+}
+
+
+
+
 function requestProcessor($request)
 {
   echo "received request".PHP_EOL;
@@ -101,8 +117,16 @@ function requestProcessor($request)
 	    break;
     case "bookshelf":
 	    return showBookshelf($request['user']);
+	    break;
     case "logout":
 	    return logoutUser($request['user']);
+	    break;
+    case "goals":
+	    return setGoals($request['user'],$request['goals']);
+	    break;
+    case "getgoals":
+	    return showGoals($request['user']);
+	    break;
 
   }
   //return array("returnCode" => '0', 'message'=>"Server received request and processed");
