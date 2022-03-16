@@ -1,4 +1,4 @@
-!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -34,7 +34,8 @@
 </div>
 
 
-        <script>
+
+<script>
 
 
 
@@ -49,9 +50,16 @@ function goals()
                 if ((this.readyState == 4)&&(this.status == 200))
                 {
 
-
+                        
                         document.getElementById("container").style.display = "none";
 var goals = document.getElementById("goals").value;
+
+
+sessionStorage.setItem("goals", goals);
+
+//let disgoal = sessionStorage.getItem("goals").value;
+  //      alert(sessionStorage.getItem("goals"));
+
 document.getElementById("showgoal").innerHTML = "Your goal is to read " + goals+ " books!";
 
                         return show();
@@ -60,7 +68,7 @@ document.getElementById("showgoal").innerHTML = "Your goal is to read " + goals+
                 } 
         }
 user = sessionStorage.getItem("username");
-//        var goals = document.getElementById("goals").value;
+    var goals = document.getElementById("goals").value;
 
 request.send("type=goals&goals="+goals+"&user="+user);
 
@@ -68,6 +76,7 @@ request.send("type=goals&goals="+goals+"&user="+user);
 
 }
 
+   alert(sessionStorage.getItem("goals"));
 function show(){
         document.getElementById("test").style.display = "block";
 
@@ -78,6 +87,7 @@ function show(){
 //var redirect = function(){
 //      document.location.href="goalsset.html"
 //}
+
         </script>
 
 
@@ -108,6 +118,7 @@ function show(){
                   </div>
 
 </div>
+
 <div id = "test" class = "hide">
         <div class = "container">
 
@@ -136,9 +147,3 @@ function show(){
 
 
 </html>
-
-                                                                                                                                                                                                                                                                                                                                                   140,0-1       Bot
-
-                                                                                                                                                                                                                                                                                                                                                   21,1          Top
-
-
