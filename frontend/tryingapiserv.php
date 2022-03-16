@@ -20,11 +20,8 @@ switch ($request["type"])
 //              $response = $client->send_request($request);
         //      $response = $client->publish($request);
 
-        case "goals":
-                $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
-                $response = $client->send_request($request);
-	case "user":
-                $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
+        case "search":
+                $client = new rabbitMQClient("sampleClient.ini","testServer");
                 $response = $client->send_request($request);
 
         break;
@@ -33,4 +30,5 @@ switch ($request["type"])
 echo json_encode($response);
 exit(0);
 
+?>
 
