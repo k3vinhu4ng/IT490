@@ -78,7 +78,7 @@ function sessionResponse(response)
         if (validate == '1'){
                 
                 let userdisplay = sessionStorage.getItem("username");
-                document.getElementById("user").innerHTML = userdisplay;
+                document.getElementById("user").innerHTML = "Hello " +userdisplay;
                
         }
         else {
@@ -259,7 +259,7 @@ function search()
 <div class = "container">
         <body class = "bg-light">
 
-		<div id="user"></div>
+		<h1 id="user"></h1>
 			<script>
 			ShowUser();
 			//alert (sessionStorage.getItem("username"));
