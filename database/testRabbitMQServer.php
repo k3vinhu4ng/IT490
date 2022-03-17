@@ -4,6 +4,8 @@ require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 require_once('login.php.inc');
+//include('login.php.inc');
+
 
 function doLogin($username,$password)
 {
@@ -36,6 +38,59 @@ function checkSearch($search)
 
 
 
+function addBook($username, $book_id, $book_data)
+{
+    // lookup search query in database
+    // 
+    $login = new loginDB();
+    return $login->db_add_book($username, $book_id, $book_data);
+    //return false if not valid
+}
+
+function showBookShelf($username)
+{
+	$login = new loginDB();
+	return $login->bookshelf($username);
+}
+
+
+
+function logoutUser($username)
+{
+	$login = new loginDB();
+	return $login->deleteSession($username);
+}
+
+
+function doValidate($username, $sessionID)
+{
+	$login = new loginDB();
+	return $login->validateSession($username, $sessionID);
+
+}
+
+
+
+function setGoals($username, $goals){
+	$login = new loginDB();
+	return $login->setGoals($username, $goals);
+}
+
+
+
+function showGoals($username){
+	$login = new loginDB();
+	return $login->getReadingGoal($username);
+}
+
+
+function setLike($username, $title, $like){
+	$login = new loginDB();
+	return $login->updateLike($username, $title, $like);
+}
+
+
+
 
 
 function requestProcessor($request)
@@ -49,23 +104,49 @@ function requestProcessor($request)
   switch ($request['type'])
   {
     case "login":
-      return doLogin($request['username'],$request['password']);
+	    return doLogin($request['username'],$request['password']);
+	    break;
     case "validate_session":
-	return doValidate($request['sessionId']);
+	    return doValidate($request['user'],$request['sessionID']);
+	    //echo "hello".PHP_EOL;
+	    break;
     case "new":
-	 return createLogin($request['username'],$request['password']);
+	    return createLogin($request['username'],$request['password']);
+	    break;
     case "search":
-	return checkSearch($request['search']);
-	//echo "received search request term";
+	    //echo "running once".PHP_EOL;
+	    return checkSearch($request['search']);
+	    break;
+	    //echo "received search request term";
+    case "add":
+	    //echo $request["bookdata"];
+	    return addBook($request['user'],$request['bookid'],$request['bookdata']);
+	    break;
+    case "bookshelf":
+	    return showBookshelf($request['user']);
+	    break;
+    case "logout":
+	    return logoutUser($request['user']);
+	    break;
+    case "goals":
+	    return setGoals($request['user'],$request['goals']);
+	    break;
+    case "getgoals":
+	    return showGoals($request['user']);
+	    break;
+    case "like":
+	    return setLike($request['user'], $request['title'], $request['like']);
+	    break;
 
 
   }
-  return array("returnCode" => '0', 'message'=>"Server received request and processed");
+  //return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
 
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
 
 $server->process_requests('requestProcessor');
+unset($server);
 exit();
 ?>
 
