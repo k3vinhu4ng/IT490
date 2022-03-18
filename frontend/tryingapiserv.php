@@ -20,7 +20,11 @@ switch ($request["type"])
 //              $response = $client->send_request($request);
         //      $response = $client->publish($request);
 
+<<<<<<< HEAD:frontend/tryingapiserv.php
+        case "search":
+=======
         case "goals":
+>>>>>>> master:frontend/goals.php
                 $client = new rabbitMQClient("sampleClient.ini","testServer");
                 $response = $client->send_request($request);
 
@@ -31,3 +35,7 @@ echo json_encode($response);
 exit(0);
 
 ?>
+<<<<<<< HEAD:frontend/tryingapiserv.php
+
+=======
+>>>>>>> master:frontend/goals.php
