@@ -278,6 +278,31 @@ public function searchQuery($search)
 }
 
 
+
+public function updateLike($username, $title, $like)
+{
+	$un = $this->logindb->real_escape_string($username);
+        $book_id = $this->logindb->real_escape_string($title);
+        $like_value = $this->logindb->real_escape_string($like);
+
+	//$check = "select LIKE_VALUE from BOOKSHELF where userid = '$un' and BOOK_ID ='$book_id' LIMIT 1;";
+        //$sql_action = $this->logindb->query($check);
+
+	 $update = "update BOOKSHELF set LIKE_VALUE = '$like_value' WHERE userid = '$un' and BOOK_ID ='$book_id';";
+         $action = $this->logindb->query($update);
+	echo "SQL CODE: ";
+	 echo mysqli_errno($this->logindb).PHP_EOL;
+         
+                return 1;
+
+
+        }
+
+
+    
+
+
+
 public function db_add_book($username,$book_id, $book_data)
 {
 	$un = $this->logindb->real_escape_string($username);
@@ -290,7 +315,7 @@ public function db_add_book($username,$book_id, $book_data)
 
 	if(mysqli_num_rows($checkbook) == 0) {
 		echo "not in bookshelf".PHP_EOL;
-		$insert = "insert into BOOKSHELF values('$un', '$book_id', '$data');";
+		$insert = "insert into BOOKSHELF(userid, BOOK_ID, BOOK) values('$un', '$book_id', '$data');";
 		$action = $this->logindb->query($insert);
 		echo mysqli_errno($this->logindb).PHP_EOL;
 		echo "0 = successfully added".PHP_EOL;
@@ -322,7 +347,7 @@ public function bookshelf($username)
 	{
 		
 		//echo $row['BOOK'].PHP_EOL;
-		array_push($result, $row['BOOK']);	
+		array_push($result, [$row['BOOK'], $row['LIKE_VALUE']]);	
 	
 	}
 	//echo implode("|", $result);

@@ -84,6 +84,13 @@ function showGoals($username){
 }
 
 
+function setLike($username, $title, $like){
+	$login = new loginDB();
+	return $login->updateLike($username, $title, $like);
+}
+
+
+
 
 
 function requestProcessor($request)
@@ -127,6 +134,10 @@ function requestProcessor($request)
     case "getgoals":
 	    return showGoals($request['user']);
 	    break;
+    case "like":
+	    return setLike($request['user'], $request['title'], $request['like']);
+	    break;
+
 
   }
   //return array("returnCode" => '0', 'message'=>"Server received request and processed");
