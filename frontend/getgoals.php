@@ -1,9 +1,7 @@
 <?php
-
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
-
 if (!isset($_POST))
 {
         $msg = "NO POST MESSAGE SET, POLITELY FUCK OFF";
@@ -20,22 +18,12 @@ switch ($request["type"])
 //              $response = $client->send_request($request);
         //      $response = $client->publish($request);
 
-<<<<<<< HEAD:frontend/tryingapiserv.php
-        case "search":
-=======
-        case "goals":
->>>>>>> master:frontend/goals.php
+        case "getgoals":
                 $client = new rabbitMQClient("sampleClient.ini","testServer");
                 $response = $client->send_request($request);
-
         break;
 }
-
-echo json_encode($response);
+//$response = "hello";
+echo json_encode(trim($response));
 exit(0);
-
 ?>
-<<<<<<< HEAD:frontend/tryingapiserv.php
-
-=======
->>>>>>> master:frontend/goals.php

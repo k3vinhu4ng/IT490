@@ -36,8 +36,12 @@
 
 
         <script>
+<<<<<<< HEAD:frontend/goals2.html
 /*
 var response;
+=======
+//var response;
+>>>>>>> master:frontend/goals.html
 alert('hi');
         function HandleResponse(response){
 alert("hi");
@@ -52,7 +56,11 @@ else{
         return show1();
 //      document.getElementById("container").style.display = "block";
 }
+<<<<<<< HEAD:frontend/goals2.html
 */
+=======
+}
+>>>>>>> master:frontend/goals.html
 function sendUser()
 {
         var request = new XMLHttpRequest();
@@ -63,15 +71,29 @@ function sendUser()
                 
                 if ((this.readyState == 4)&&(this.status == 200))
                 {
+<<<<<<< HEAD:frontend/goals2.html
                         //alert(this.responseText);
+=======
+
+        HandleResponse(this.responseText);     
+        document.getElementById("container").style.display = "block";
+>>>>>>> master:frontend/goals.html
 }
 
                 } 
         
+<<<<<<< HEAD:frontend/goals2.html
 //var username2 = document.getElementById("username").value;
 
 
 user = sessionStorage.getItem("username");
+=======
+//var usename2 = document.getElementById("username").value;
+
+//sessionStorage.clear();
+
+        user = sessionStorage.getItem("username");
+>>>>>>> master:frontend/goals.html
    
 request.send("type=user&user="+user);
 
@@ -80,6 +102,7 @@ request.send("type=user&user="+user);
 }
 
 sendUser();
+<<<<<<< HEAD:frontend/goals2.html
 //test func for cris
 
 function HandleResponse(response){
@@ -96,6 +119,24 @@ function HandleResponse(response){
 }
 }
 
+=======
+/*
+function HandleResponse(response){
+alert("hi");
+        var usergoal = String(JSON.parse(response));
+if(usergoal == '1'){
+        console.log('hi');
+return show();
+//document.getElementById("test").style.display = "block";
+}
+else{
+        alert("hi");
+        return show1();
+//      document.getElementById("container").style.display = "block";
+}
+}
+*/
+>>>>>>> master:frontend/goals.html
 function goals()
 {
         var request = new XMLHttpRequest();
@@ -103,25 +144,37 @@ function goals()
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
         request.onreadystatechange= function ()
         {
-                
+
                 if ((this.readyState == 4)&&(this.status == 200))
                 {
                 document.getElementById("container").style.display = "none";
 //var goals = document.getElementById("goals").value;
 
+<<<<<<< HEAD:frontend/goals2.html
 
 
+//sessionStorage.setItem("goals", goals);
+=======
+>>>>>>> master:frontend/goals.html
+
+//let disgoal = sessionStorage.getItem("goals").value;
+  //      alert(sessionStorage.getItem("goals"));
+
+<<<<<<< HEAD:frontend/goals2.html
+//document.getElementById("showgoal").innerHTML = "Your goal is to read " + goals+ " books!";
+=======
 //sessionStorage.setItem("goals", goals);
 
 //let disgoal = sessionStorage.getItem("goals").value;
   //      alert(sessionStorage.getItem("goals"));
 
-//document.getElementById("showgoal").innerHTML = "Your goal is to read " + goals+ " books!";
+document.getElementById("showgoal").innerHTML = "Your goal is to read " + goals+ " books!";
+>>>>>>> master:frontend/goals.html
 
                         return show();
 
 
-                } 
+                }
         }
 user = sessionStorage.getItem("username");
     var goals = document.getElementById("goals").value;
@@ -136,7 +189,10 @@ request.send("type=goals&goals="+goals+"&user="+user);
 
 
 function show1(){
+<<<<<<< HEAD:frontend/goals2.html
 	
+=======
+>>>>>>> master:frontend/goals.html
         document.getElementById("container").style.display = "block";
 
 
@@ -157,6 +213,7 @@ function show(){
 //}
 
 
+<<<<<<< HEAD:frontend/goals2.html
 
 
  </script>
@@ -172,32 +229,20 @@ function show(){
                   </div>
                                
                           <div class = "card-body">
+=======
+>>>>>>> master:frontend/goals.html
 
-                        <h4 class = "card-title">How Many Books Would You Like to Read This Year?</h4>
-                <form method="POST" name = "goal" id="goal" autocomplete = "off" action="javascript:goals()">
-<div class = "form-group">
 
-                <!-- <label for="goals"></label>-->
-                <br>
-  <input type="number" placeholder="Pick a Number!" id="goals" name = "goals" min="1" max="50">
-  <br><br>
-  <button type = "submit" name="submit_goals" class = "btn btn-success" >Submit</button>
-  </input>
-                </form>                   </div>
-          </div>
-                  </div>
+ </script>
 
-</div>
-<div id = "test" class = "hide">
-        <div class = "container">
+<div class = "container hide" id = "container">
 
         <body class = "bg-light">
-
-        <br><br>
+  <br><br>
           <div class = "card">
 
                   <div class = "card-header bg-success text-light">
-                 Your Reading Goal
+                 Set a Reading Goal!
                   </div>
 
                           <div class = "card-body">
@@ -213,7 +258,9 @@ function show(){
 
 
 
-
-
 </html>
 
+<<<<<<< HEAD:frontend/goals2.html
+=======
+                                                                                                                 
+>>>>>>> master:frontend/goals.html

@@ -120,12 +120,14 @@ public function logOutUser($username){
 
 // make a function that takes timestamp and hashes it
 
-public function setGoals($goals)
+public function setGoals($goals,$user)
 {
+	$un = $this->logindb->real_escape_string($user);
 	$goal = $this->logindb->real_escape_string($goals);
-	//$sel = "select * from bookgoals where username = '$un';";
-	//$selquery = $this->logindb->query($sel);
-	$ins = "insert into testgoals values('$goal');";
+	$sel = "select * from bookgoals where username = '$un';";
+	$selquery = $this->logindb->query($sel);
+	// if selq == 0 then insert blah blah blah
+	$ins = "insert into bookgoals values('$un','$goals');";
 	//$rep = "replace into bookgoals values('$un','$goal');";
 
 	//if(mysqli_num_rows($selquery) == 0) {
@@ -159,6 +161,8 @@ public function likeBook($username,$book_id, $liked)
 	//while fetching row 
 	//insert into BOOKSHELF value liked blah blah blah
 	
+
+}
 
 }
 

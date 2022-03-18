@@ -14,11 +14,87 @@
 <script>
 
 
+
+
+function logout()
+{
+//alert(book_id.value);
+        var request = new XMLHttpRequest();
+        request.open("POST","logout.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+       request.onreadystatechange= function ()
+        {
+                
+                if ((this.readyState == 4)&&(this.status == 200))
+                {
+                sessionStorage.clear();
+                window.location.href = "index.html";    
+        
+                }               
+        }
+
+        //alert(book_id);
+        let user2 = sessionStorage.getItem("username");
+        request.send("type=logout&user="+user2);
+
+
+
+
+}
+
+
+
+
 function ShowUser()
 {
-	let userdisplay = sessionStorage.getItem("username");
-	document.getElementById("user").innerHTML = userdisplay;
+        //let userdisplay = sessionStorage.getItem("username");
+        //document.getElementById("user").innerHTML = userdisplay;
+
+        var request = new XMLHttpRequest();
+        request.open("POST","validate.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+       request.onreadystatechange= function ()
+        {
+
+                if ((this.readyState == 4)&&(this.status == 200))
+                {
+                      // alert(this.responseText);
+                        sessionResponse(this.responseText);
+
+                }
+        }
+
+        let user1 = sessionStorage.getItem("username");
+        let sessionID1 = sessionStorage.getItem("sessionID");
+
+        request.send("type=validate_session&user="+user1+"&sessionID="+sessionID1);
+
+
+
 }
+
+
+
+function sessionResponse(response)
+{
+        var validate = String(JSON.parse(response));
+//      document.getElementById("textResponse").innerHTML = response+"<p>";     
+        if (validate == '1'){
+                
+                let userdisplay = sessionStorage.getItem("username");
+                document.getElementById("user").innerHTML = userdisplay;
+               
+        }
+        else {
+                alert("Please Login.");
+               window.location.href = "index.html";
+}
+
+
+}
+
+
+
 
 
 
@@ -97,9 +173,11 @@ function showBooks()
                     <a href="home.html" class="nav-item nav-link">Home</a>
                     <a href="user.html" class="nav-item nav-link active">Bookshelf</a>
                     <a href="#" class="nav-item nav-link">Forum</a>
+                     <a href="goals.html" class="nav-item nav-link">Reading Goal</a>
+
                                     </div>
                 <div class="navbar-nav ms-auto">
-                    <a href="index.html" class="nav-item nav-link active">Login</a>
+                    <a onclick = "logout()" href="#" class="nav-item nav-link">Logout</a>
                 </div>
             </div>
         </div>
