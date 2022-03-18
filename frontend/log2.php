@@ -52,7 +52,7 @@ for($x = 0; $x < count($errorArray); $x++){
 }
   //    echo 'hello'; 
 //}
-
+merge 
 }
  */
 function requestProcessor($request)

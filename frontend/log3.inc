@@ -11,7 +11,7 @@ error_reporting(E_ALL);
    ini_set('display_errors', 'Off');
    ini_set('log_errors', 1);
 
-    
+//merge    
 ini_set('error_log', 'log.txt');
 function logClient($error){
 
