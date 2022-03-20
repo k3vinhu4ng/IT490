@@ -25,12 +25,12 @@ function logout()
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
        request.onreadystatechange= function ()
         {
-                
+
                 if ((this.readyState == 4)&&(this.status == 200))
                 {
                 sessionStorage.clear();
                 window.location.href = "index.html";    
-        
+
                 }               
         }
 
@@ -45,46 +45,32 @@ function logout()
 {
         //let userdisplay = sessionStorage.getItem("username");
         //document.getElementById("user").innerHTML = userdisplay;
-
         var request = new XMLHttpRequest();
         request.open("POST","validate.php",true);
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
        request.onreadystatechange= function ()
         {
-
                 if ((this.readyState == 4)&&(this.status == 200))
                 {
                       // alert(this.responseText);
                         sessionResponse(this.responseText);
-
                 }
         }
-
         let user1 = sessionStorage.getItem("username");
         let sessionID1 = sessionStorage.getItem("sessionID");
-
         request.send("type=validate_session&user="+user1+"&sessionID="+sessionID1);
-
-
-
-
-
 function sessionResponse(response)
 {
         var validate = String(JSON.parse(response));
 //      document.getElementById("textResponse").innerHTML = response+"<p>";
         if (validate == '1'){
-
                 let userdisplay = sessionStorage.getItem("username");
                 document.getElementById("user").innerHTML = userdisplay;
-
         }
         else {
                 alert("Please Login.");
                window.location.href = "index.html";
 }
-
-
 }*/
 
 function Submit_Review() {
@@ -109,29 +95,45 @@ function Get_Forum() {
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
         request.onreadystatechange= function ()
         {
-                
+
                 if ((this.readyState == 4)&&(this.status == 200))
                 {
                         Display_Forum(this.responseText);       
                 } 
         }
                // user = sessionStorage.getItem("username");
+//	alert("hope");
 		username="vik";
-                request.send("type=getforum&user="+user);
+                request.send("type=showForum&username="+username);
 }
 
-function Display_Forum() {
+function Display_Forum(response) {
 
 	 forum = JSON.parse(response);
-        //alert(test);
+	console.log(forum);
+//        alert("test");
         if (forum  == "0")
         {
        document.getElementById("showforum").innerHTML = "Be first to write a review";
 
         }
-        else {
-        document.getElementById("showforum").innerHTML = "here are all the reviews";
+        else {	
 
+		
+		for (var key in forum) {
+			user = forum[key][0];
+			subject =forum[key][1];
+			message=forum[key][2];
+                        //data = forum[key][0];
+			//result = JSON.parse(data);
+                //        user = key['username'];
+
+			document.getElementById("showforum").innerHTML +=
+                         user + "<br>" + subject + "<br>" + message + "<br>";
+
+                }
+
+//	alert("please");
         }
 
 }
@@ -216,7 +218,9 @@ function Display_Forum() {
 		     <div class = "card-body">
 			<h4 id="showforum" class="card-title"></h4>
 
-		
+			<script> Get_Forum(); </script>
+
+
 		     </div>
 
 	  </div>
@@ -237,5 +241,3 @@ function Display_Forum() {
 
 
 </html>
-
-
