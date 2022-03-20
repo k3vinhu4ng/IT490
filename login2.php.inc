@@ -16,14 +16,9 @@ public function __construct()
 	echo "correctly connected to database".PHP_EOL;
 }
 
-public function genSessionID($timestamp) {
-	$ts = $this->logindb->real_escape_string($timestamp);
-	
-	// get timestamp from front end to send over to backend as a request!
-	// pass the time stamp as a string 
-	// hash it using sha1() 
-	// store the string to the sessions table 
-}
+
+
+
 
 public function hashTime()
 {
@@ -33,6 +28,13 @@ public function hashTime()
 
         return $ht;
 
+}
+
+public function hashPW($pw){
+
+	$hashedpw = sha1($pw);
+
+	return $hashedpw;
 }
 
 
@@ -54,6 +56,113 @@ public function storeHash($username)
 }
 
 
+public function deleteSession($username)
+{
+
+	$un = $this->logindb->real_escape_string($username);
+	$statement = "delete from SESSIONS where userid = '$un';";
+	$response = $this->logindb->query($statement);
+
+
+}
+
+
+public function setGoals($user, $goals)
+{
+	$un = $this->logindb->real_escape_string($user);
+	//$goal = $this->logindb->real_escape_string($goals);
+	$sel = "select * from GOALS where userid = '$un';";
+	$selquery = $this->logindb->query($sel);
+	echo "SQL CODE: ";
+        echo mysqli_errno($this->logindb).PHP_EOL;
+	
+
+	//$rep = "replace into bookgoals values('$un','$goal');";
+
+	if(mysqli_num_rows($selquery) == 0) {
+		
+		echo "User has no previous goal!".PHP_EOL;
+		$ins = "insert into GOALS values('$un',$goals);";
+		$sql_action = $this->logindb->query($ins);
+	
+		echo "SQL CODE: ";
+	        echo mysqli_errno($this->logindb).PHP_EOL;
+
+		return 1;
+	}
+	if(mysqli_num_rows($selquery) == 1)
+	{
+		echo "User has previous goals. Will update".PHP_EOL;
+		$update = "update GOALS set goals = $goals where userid = '$un';";
+		$sql_action = $this->logindb->query($update);
+
+		echo "SQL CODE: ";
+       		 echo mysqli_errno($this->logindb).PHP_EOL;
+	
+
+		return 1;
+	}
+}
+
+
+
+public function getReadingGoal($username)
+{
+	$un = $this->logindb->real_escape_string($username);
+	$select = "select goals from GOALS where userid = '$un' LIMIT 1;";
+	
+	echo "Fetching user reading goals".PHP_EOL;
+	$sql_action = $this->logindb->query($select);
+
+        echo "SQL CODE: ";
+        echo mysqli_errno($this->logindb).PHP_EOL;
+
+	if(mysqli_num_rows($sql_action) == 0) {
+
+                echo "User has no reading goals yet.".PHP_EOL;
+            
+                return 0;
+        }
+	
+        if(mysqli_num_rows($sql_action) == 1) {
+
+                echo "Got user reading goals.".PHP_EOL;
+		$row = mysqli_fetch_array($sql_action);
+		$result = $row['goals'];
+		//$data = array($result, '1');
+		echo $result.PHP_EOL;	
+		//$answer = json_encode($result);
+		return $result;
+
+	}
+
+}
+
+
+public function validateSession($username, $sessionID)
+{
+	$un = $this->logindb->real_escape_string($username);
+	$statement = "select * from SESSIONS where userid = '$un' and sessionID = '$sessionID';";
+	$response = $this->logindb->query($statement);
+
+
+	 while ($row = $response->fetch_assoc())
+	{
+		if($row['sessionID'] == $sessionID)
+		{
+		return 1;
+		}
+		else
+		{
+		return 0;
+		}
+
+	}
+
+}
+
+
+
 public function validateLogin($username,$password)
 {
 	$un = $this->logindb->real_escape_string($username);
@@ -61,109 +170,203 @@ public function validateLogin($username,$password)
 	$statement = "select * from users where userid = '$un'";
 	$response = $this->logindb->query($statement);
 
-	$hasht = $this->hashTime();
-	$storehasht = $this->storeHash($un);
+	$hashedpw = $this->hashPW($pw);
 
 	while ($row = $response->fetch_assoc())
 	{
 		echo "checking password for $username".PHP_EOL;
-		if ($row["password"] == $pw)
+		if ($row["password"] == $hashedpw)
 		{
 			echo "passwords match for $username".PHP_EOL;
-//			$ins = "insert into usersessions values('$un','$hasht');";
-//			$response = $this->logindb->query($ins);
-			return 1;
-			//$response2 = $this->logindb->query($ins);
-		}
-		
-		echo "passwords did not match for $username".PHP_EOL;
+
+			//code for creating and inserting sessionID
+			//return sessionID variable in array with 1
+
+			$result = array();
+			$sessionID = $this->hashTime();
+			echo $sessionID.PHP_EOL;
 			
-	}	
+			$session_statement = "insert into SESSIONS(userid, sessionID) values('$username', '$sessionID');";
+			//echo $session_statement.PHP_EOL;
+			$sql_action = $this->logindb->query($session_statement);
+			echo "SQL CODE: ";
+			echo mysqli_errno($this->logindb).PHP_EOL;
+			array_push($result, $username, $sessionID);
+			//echo implode("|", $result);
+
+
+			return $result;// password match value
+		}
+		echo "passwords did not match for $username".PHP_EOL;
+	}
 	return 0;//no users matched username
 }
 
 
 
-public function createLogin($username,$password)
+public function createUser($username,$password)
 {
-        $un = $this->logindb->real_escape_string($username);
-        $pw = $this->logindb->real_escape_string($password);
-	$sel = "select * from users where userid = '$un';";
-	$selquery = $this->logindb->query($sel);
-	$ins = "insert into users values('$un','$pw');";
+	$un = $this->logindb->real_escape_string($username);
+	$pw = $this->logindb->real_escape_string($password);
 
-	if(mysqli_num_rows($selquery) ==0) {
+	$hashedpw = $this->hashPW($pw);
+	
+	$check = "select * from users where userid = '$un';";
+	$checkuser = $this->logindb->query($check);
 
-		echo "good to register user";
-		$response = $this->logindb->query($ins);
+	if(mysqli_num_rows($checkuser) == 0) {
+		echo "user does not exist can register";
+		$insert = "insert into users values ('$un','$hashedpw');";
+		$response = $this->logindb->query($insert);
 		return 1;
 	}
-
 	else{
-		echo "username exists. try a different username.";
+		echo "user exists";
 		return 0;
 	}
+}
+
+
+public function searchQuery($search)
+{
+	$search_term = $this->logindb->real_escape_string($search);
+
 	
-	//$response = $this->logindb->query($statement);
+	$check = "select * from SEARCH where SEARCH_QUERY = '$search_term' limit 1;";
+	echo "SQL SELECT Code Error: ";
+	echo mysqli_errno($this->logindb).PHP_EOL;
 
+	$checksearch = $this->logindb->query($check);
+
+	if(mysqli_num_rows($checksearch) == 0) {
+		echo "contacting api".PHP_EOL;
+		
+		$client = new rabbitMQClient("api.ini","apiServer");
+
+		
+		$request = array();
+		$request["type"] = "search";
+		$request["search"] = $search_term;
+		
+		$response = $client->send_request($request);
+		//$response = $client->publish($request);		
+		
+		unset($client);	
+		//$close = $client->disconnect();
+
+		$data = json_encode($response);
+		
+		echo "data got from api".PHP_EOL;
+		//echo $data;	
+		$data2 = $this->logindb->real_escape_string($data);
+		$insert = "insert into SEARCH values('$search', '$data2');";
+			
+
+		$sql_action = $this->logindb->query($insert);
+		echo "SQL INSERT :";
+
+		echo mysqli_errno($this->logindb).PHP_EOL;
+
+		echo "api data stored in database".PHP_EOL;
+		return $response;
+		//return 1;
+
+	}
+	else{
+		echo "accessing database for book records".PHP_EOL;
+		$rows = array();
+		while ($r = mysqli_fetch_array($checksearch))
+		{
+			$answer = $r['RESULT'];
+		}
+		//echo $answer;
+		$data = json_decode($answer, true);
+		return $data;
+		//return 0;
+	}
 }
 
-public function logOutUser($username){
 
+
+public function updateLike($username, $title, $like)
+{
 	$un = $this->logindb->real_escape_string($username);
-	$stmt = "delete from usersessions where userid = '$un';";
-	$response = $this->logindb->query($stmt);
-	return 1;
+        $book_id = $this->logindb->real_escape_string($title);
+        $like_value = $this->logindb->real_escape_string($like);
 
-}
+	//$check = "select LIKE_VALUE from BOOKSHELF where userid = '$un' and BOOK_ID ='$book_id' LIMIT 1;";
+        //$sql_action = $this->logindb->query($check);
+
+	 $update = "update BOOKSHELF set LIKE_VALUE = '$like_value' WHERE userid = '$un' and BOOK_ID ='$book_id';";
+         $action = $this->logindb->query($update);
+	echo "SQL CODE: ";
+	 echo mysqli_errno($this->logindb).PHP_EOL;
+         
+                return 1;
 
 
-// make a function that takes timestamp and hashes it
+        }
 
-public function setGoals($goals,$user)
+
+    
+
+
+
+public function db_add_book($username,$book_id, $book_data)
 {
-	$un = $this->logindb->real_escape_string($user);
-	$goal = $this->logindb->real_escape_string($goals);
-	$sel = "select * from bookgoals where username = '$un';";
-	$selquery = $this->logindb->query($sel);
-	// if selq == 0 then insert blah blah blah
-	$ins = "insert into bookgoals values('$un','$goals');";
-	//$rep = "replace into bookgoals values('$un','$goal');";
-
-	//if(mysqli_num_rows($selquery) == 0) {
-		echo "reading goal set!";
-		$response = $this->logindb->query($ins);
-		return 1;
-	//}
-	//else {
-	//	echo "new reading goal set!";
-	//	$response = $this->logindb->query($rep);
-	//	return 1;
-	//}
-}
-
-public function likeBook($username,$book_id, $liked)
-{
-
 	$un = $this->logindb->real_escape_string($username);
 	$book_id = $this->logindb->real_escape_string($book_id);
-	$li = $this->logindb->real_escape_string($liked);
+	$data = $this->logindb->real_escape_string($book_data);
+	
+	
+	$check = "select * from BOOKSHELF where userid = '$un' and BOOK_ID ='$book_id';";
+	$checkbook = $this->logindb->query($check);
 
-	//select where user and book equals this then
-	$sel = "select * from BOOKSHELF where userid='$un' and BOOK_ID='$book_id';";
-	$selq = $this->logindb->query($sel);
-	while ($row = $selq->fetch_assoc()){
-		//like column not made yet; need to alter table
-		$ins = "insert into BOOKSHELF(like) values('$li');";
-		$response = $this->logindb->query($ins);
+	if(mysqli_num_rows($checkbook) == 0) {
+		echo "not in bookshelf".PHP_EOL;
+		$insert = "insert into BOOKSHELF(userid, BOOK_ID, BOOK) values('$un', '$book_id', '$data');";
+		$action = $this->logindb->query($insert);
+		echo mysqli_errno($this->logindb).PHP_EOL;
+		echo "0 = successfully added".PHP_EOL;
 		return 1;
 	}
-	//while fetching row 
-	//insert into BOOKSHELF value liked blah blah blah
+	else{
+		echo "book exists in bookshelf";
+		return 0;
+	}
+}
+
+
+public function bookshelf($username)
+{
+	$un = $this->logindb->real_escape_string($username);
 	
+	
+	$check = "select * from BOOKSHELF where userid = '$un';";
+	$checkbook = $this->logindb->query($check);
+	//echo mysql_fetch_array($checkbook);
+	//return mysql_fetch_array($checkbook);
 
+	//$bookshelf = array();
+
+	//while ($row = mysql
+	$result = array();
+
+	while($row = mysqli_fetch_array($checkbook))
+	{
+		
+		//echo $row['BOOK'].PHP_EOL;
+		array_push($result, [$row['BOOK'], $row['LIKE_VALUE']]);	
+	
+	}
+	//echo implode("|", $result);
+	//echo "returning json encoded results".PHP_EOL;
+	return $result;
 }
 
-}
 
+
+
+
+}
 ?>
