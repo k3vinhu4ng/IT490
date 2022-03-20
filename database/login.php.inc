@@ -290,7 +290,7 @@ public function searchQuery1($search)
 	$search_term = $this->logindb->real_escape_string($search);
 
 	
-	$check = "select * from SEARCH where SEARCH_QUERY = '$search_term';";
+	$check = "select * from SEARCH1 where SEARCH_QUERY = '$search_term';";
 	echo "SQL SELECT Code Error: ";
 	echo mysqli_errno($this->logindb).PHP_EOL;
 
@@ -317,36 +317,54 @@ public function searchQuery1($search)
 		
 		echo "data got from api".PHP_EOL;
 		//echo $data;	
-		$data2 = $this->logindb->real_escape_string($data);
-		
-		foreach($data as $key => $value)
+		//$data2 = $this->logindb->real_escape_string($data);
+		//echo $response;	
+		foreach($response as $key => $value)
 		{
-		echo $data[key][0];
+			$title =  $response[$key][0];
+			$image =  $response[$key][1];
+			$description = $response[$key][2];
+			$genre = $response[$key][3];
 
-		//$insert = "insert into SEARCH values('$search', '$data2');";
+
+
+	$title_clean = $this->logindb->real_escape_string($title);
+	$image_clean = $this->logindb->real_escape_string($image);
+	$description_clean = $this->logindb->real_escape_string($description);
+	$genre_clean = $this->logindb->real_escape_string($genre);
+
+
+
+
+			//echo $genre;
+		$insert = "insert into SEARCH1(SEARCH_QUERY, TITLE, IMAGE, DESCRIPTION, GENRE) values('$search_term', '$title_clean', '$image_clean', '$description_clean', '$genre_clean');";
 			
 
-		//$sql_action = $this->logindb->query($insert);
-		//echo "SQL INSERT :";
+		$sql_action = $this->logindb->query($insert);
+		echo "SQL INSERT :";
 
-		//echo mysqli_errno($this->logindb).PHP_EOL;
+		echo mysqli_errno($this->logindb).PHP_EOL;
 
 		}
-		//echo "api data stored in database".PHP_EOL;
-		//return $response;
+		echo "api data stored in database".PHP_EOL;
+		return $response;
 		//return 1;
 
 	}
 	else{
 		echo "accessing database for book records".PHP_EOL;
-		$rows = array();
+		$final_result = array();
 		while ($r = mysqli_fetch_array($checksearch))
 		{
-			$answer = $r['RESULT'];
+			//$answer = $r['RESULT'];
+			$book = array();
+			//echo $r['TITLE'];
+			array_push($book, $r['TITLE'], $r['IMAGE'], $r['DESCRIPTION'], $r['GENRE']);
+			array_push($final_result, $book);
 		}
 		//echo $answer;
-		$data = json_decode($answer, true);
-		return $data;
+		//$data = json_decode($answer, true);
+		return $final_result;
 		//return 0;
 	}
 }
@@ -365,6 +383,28 @@ public function updateLike($username, $title, $like)
         //$sql_action = $this->logindb->query($check);
 
 	 $update = "update BOOKSHELF set LIKE_VALUE = '$like_value' WHERE userid = '$un' and BOOK_ID ='$book_id';";
+         $action = $this->logindb->query($update);
+	echo "SQL CODE: ";
+	 echo mysqli_errno($this->logindb).PHP_EOL;
+         
+                return 1;
+
+
+        }
+
+
+ 
+
+public function updateLike1($username, $title, $like)
+{
+	$un = $this->logindb->real_escape_string($username);
+        $book_id = $this->logindb->real_escape_string($title);
+        $like_value = $this->logindb->real_escape_string($like);
+
+	//$check = "select LIKE_VALUE from BOOKSHELF where userid = '$un' and BOOK_ID ='$book_id' LIMIT 1;";
+        //$sql_action = $this->logindb->query($check);
+
+	 $update = "update BOOKSHELF1 set LIKE_VALUE = '$like_value' WHERE userid = '$un' and TITLE ='$book_id';";
          $action = $this->logindb->query($update);
 	echo "SQL CODE: ";
 	 echo mysqli_errno($this->logindb).PHP_EOL;
@@ -404,6 +444,43 @@ public function db_add_book($username,$book_id, $book_data)
 }
 
 
+
+
+
+
+
+public function db_add_book1($username,$book_id, $image, $genre, $description)
+{
+	$un = $this->logindb->real_escape_string($username);
+	$book_id_clean = $this->logindb->real_escape_string($book_id);
+	//$data = $this->logindb->real_escape_string($book_data);
+	$image_clean = $this->logindb->real_escape_string($image);
+	$genre_clean = $this->logindb->real_escape_string($genre);
+	$description_clean = $this->logindb->real_escape_string($description);
+
+
+	$check = "select * from BOOKSHELF1 where userid = '$un' and TITLE ='$book_id_clean';";
+	$checkbook = $this->logindb->query($check);
+
+	if(mysqli_num_rows($checkbook) == 0) {
+		echo "not in bookshelf".PHP_EOL;
+		$insert = "insert into BOOKSHELF1(userid, TITLE, IMAGE, DESCRIPTION, GENRE) values('$un', '$book_id_clean', '$image_clean', '$description_clean', '$genre_clean');";
+		$action = $this->logindb->query($insert);
+		echo mysqli_errno($this->logindb).PHP_EOL;
+		echo "0 = successfully added".PHP_EOL;
+		return 1;
+	}
+	else{
+		echo "book exists in bookshelf";
+		return 0;
+	}
+}
+
+
+
+
+
+
 public function bookshelf($username)
 {
 	$un = $this->logindb->real_escape_string($username);
@@ -424,6 +501,36 @@ public function bookshelf($username)
 		
 		//echo $row['BOOK'].PHP_EOL;
 		array_push($result, [$row['BOOK'], $row['LIKE_VALUE']]);	
+	
+	}
+	//echo implode("|", $result);
+	//echo "returning json encoded results".PHP_EOL;
+	return $result;
+}
+
+
+
+
+public function bookshelf1($username)
+{
+	$un = $this->logindb->real_escape_string($username);
+	
+	
+	$check = "select * from BOOKSHELF1 where userid = '$un';";
+	$checkbook = $this->logindb->query($check);
+	//echo mysql_fetch_array($checkbook);
+	//return mysql_fetch_array($checkbook);
+
+	//$bookshelf = array();
+
+	//while ($row = mysql
+	$result = array();
+
+	while($row = mysqli_fetch_array($checkbook))
+	{
+		
+		//echo $row['BOOK'].PHP_EOL;
+		array_push($result, [$row['TITLE'], $row['IMAGE'], $row['DESCRIPTION'], $row['GENRE'],$row['LIKE_VALUE']]);	
 	
 	}
 	//echo implode("|", $result);

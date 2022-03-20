@@ -37,6 +37,17 @@ function checkSearch($search)
 }
 
 
+function checkSearch1($search)
+{
+    // lookup search query in database
+    // 
+    $login = new loginDB();
+    return $login->SearchQuery1($search);
+    //return false if not valid
+}
+
+
+
 
 function addBook($username, $book_id, $book_data)
 {
@@ -47,10 +58,31 @@ function addBook($username, $book_id, $book_data)
     //return false if not valid
 }
 
+
+
+function addBook1($username, $book_id, $image, $genre, $description)
+{
+    // lookup search query in database
+    // 
+    $login = new loginDB();
+    return $login->db_add_book1($username, $book_id, $image, $genre, $description);
+    //return false if not valid
+}
+
+
+
+
 function showBookShelf($username)
 {
 	$login = new loginDB();
 	return $login->bookshelf($username);
+}
+
+
+function showBookShelf1($username)
+{
+	$login = new loginDB();
+	return $login->bookshelf1($username);
 }
 
 
@@ -90,6 +122,13 @@ function setLike($username, $title, $like){
 }
 
 
+function setLike1($username, $title, $like){
+	$login = new loginDB();
+	return $login->updateLike1($username, $title, $like);
+}
+
+
+
 
 
 
@@ -122,15 +161,15 @@ function requestProcessor($request)
 	    break;
     case "search":
 	    //echo "running once".PHP_EOL;
-	    return checkSearch($request['search']);
+	    return checkSearch1($request['search']);
 	    break;
 	    //echo "received search request term";
     case "add":
 	    //echo $request["bookdata"];
-	    return addBook($request['user'],$request['bookid'],$request['bookdata']);
+	    return addBook1($request['user'],$request['bookid'],$request['image'], $request['genre'], $request['description']);
 	    break;
     case "bookshelf":
-	    return showBookshelf($request['user']);
+	    return showBookshelf1($request['user']);
 	    break;
     case "logout":
 	    return logoutUser($request['user']);
@@ -142,7 +181,7 @@ function requestProcessor($request)
 	    return showGoals($request['user']);
 	    break;
     case "like":
-	    return setLike($request['user'], $request['title'], $request['like']);
+	    return setLike1($request['user'], $request['title'], $request['like']);
 	    break;
 
 
