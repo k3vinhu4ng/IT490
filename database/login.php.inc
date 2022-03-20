@@ -1,5 +1,9 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 class loginDB
 {
 private $logindb;
@@ -245,6 +249,7 @@ public function searchQuery($search)
 		unset($client);	
 		//$close = $client->disconnect();
 
+
 		$data = json_encode($response);
 		
 		echo "data got from api".PHP_EOL;
@@ -276,6 +281,77 @@ public function searchQuery($search)
 		//return 0;
 	}
 }
+
+
+
+
+public function searchQuery1($search)
+{
+	$search_term = $this->logindb->real_escape_string($search);
+
+	
+	$check = "select * from SEARCH where SEARCH_QUERY = '$search_term';";
+	echo "SQL SELECT Code Error: ";
+	echo mysqli_errno($this->logindb).PHP_EOL;
+
+	$checksearch = $this->logindb->query($check);
+
+	if(mysqli_num_rows($checksearch) == 0) {
+		echo "contacting api".PHP_EOL;
+		
+		$client = new rabbitMQClient("api.ini","apiServer");
+
+		
+		$request = array();
+		$request["type"] = "search";
+		$request["search"] = $search_term;
+		
+		$response = $client->send_request($request);
+		//$response = $client->publish($request);		
+		
+		unset($client);	
+		//$close = $client->disconnect();
+
+
+		$data = json_encode($response);
+		
+		echo "data got from api".PHP_EOL;
+		//echo $data;	
+		$data2 = $this->logindb->real_escape_string($data);
+		
+		foreach($data as $key => $value)
+		{
+		echo $data[key][0];
+
+		//$insert = "insert into SEARCH values('$search', '$data2');";
+			
+
+		//$sql_action = $this->logindb->query($insert);
+		//echo "SQL INSERT :";
+
+		//echo mysqli_errno($this->logindb).PHP_EOL;
+
+		}
+		//echo "api data stored in database".PHP_EOL;
+		//return $response;
+		//return 1;
+
+	}
+	else{
+		echo "accessing database for book records".PHP_EOL;
+		$rows = array();
+		while ($r = mysqli_fetch_array($checksearch))
+		{
+			$answer = $r['RESULT'];
+		}
+		//echo $answer;
+		$data = json_decode($answer, true);
+		return $data;
+		//return 0;
+	}
+}
+
+
 
 
 

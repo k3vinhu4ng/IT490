@@ -32,7 +32,7 @@ function checkSearch($search)
     // lookup search query in database
     // 
     $login = new loginDB();
-    return $login->SearchQUery($search);
+    return $login->SearchQuery($search);
     //return false if not valid
 }
 
@@ -101,6 +101,13 @@ function requestProcessor($request)
   {
     return "ERROR: unsupported message type";
   }
+
+//$log_client = new rabbitMQClient("log.ini", "testServer");
+//$log_client ->publish($request);
+//echo "Published Request".PHP_EOL;
+
+
+
   switch ($request['type'])
   {
     case "login":
@@ -141,11 +148,15 @@ function requestProcessor($request)
 
   }
   //return array("returnCode" => '0', 'message'=>"Server received request and processed");
+
+
 }
 
 $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
 
 $server->process_requests('requestProcessor');
+
+
 unset($server);
 exit();
 ?>
