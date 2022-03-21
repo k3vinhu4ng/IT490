@@ -109,7 +109,7 @@ function bookshelf_response(response)
 
 function AddBook(book_id)
 {
-	//alert(book_id.value);
+        //alert(book_id.value);
         var request = new XMLHttpRequest();
         request.open("POST","addbook.php",true);
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
@@ -118,97 +118,91 @@ function AddBook(book_id)
                 
                 if ((this.readyState == 4)&&(this.status == 200))
                 {
-                       	bookshelf_response(this.responseText);
-	
+                        bookshelf_response(this.responseText);
+        
                 }               
         }
 
-	//alert(book_id);
-	user = sessionStorage.getItem("username");
-	book = book_id.value;
-	
-	
+        //alert(book_id);
+                                       
+	 user = sessionStorage.getItem("username");
+        book = book_id.value;
 
 
-	book_data =  encodeURIComponent(book_id.dataset.book);
-	
-	//book_data = book_id.dataset.book;
+        book_image = encodeURIComponent(book_id.dataset.image);
+        book_genre = book_id.dataset.genre;
+        book_description = book_id.dataset.description;
+        //book_data =  encodeURIComponent(book_id.dataset.book);
 
-	request.send("type=add&user="+user+"&bookid="+book+"&bookdata="+book_data);
 
+        //book_data = book_id.dataset.book;
+
+        request.send("type=add&user="+user+"&bookid="+book+"&image="+book_image+"&genre="+book_genre+"&description="+book_description);
 
 }
-
-
 
 
 
 function DisplayBooks(response)
 {
-	var response = JSON.parse(response);
-//	document.getElementById("textResponse").innerHTML = response+"<p>";	
-//	document.getElementById("textResponse").innerHTML = response['items'][0]['volumeInfo']['description'];
+        var response = JSON.parse(response);
 
-//	data = response;
+        data = response;
 
-	data = response['items'];
+        document.getElementById("textResponse").innerHTML = "";
+        for (var key in data) {
 
-//	output = String(data);
-//	document.getElementById("textResponse").innerHTML = output;
-	document.getElementById("textResponse").innerHTML = "";
-	for (var key in data) {
-		book = data[key]['volumeInfo'];
-		//title = data[key]['volumeInfo']['title'];
-		book_id = "i"+String(data[key]['id']);
+                title = data[key][0];
+                //alert(title);
+                book_id = "i"+String(key);
 
-		book_info = JSON.stringify(book);
-		book_info = book_info.replace(/'/g,"&#39");
-		//book_stuff = encodeURIComponent(book_info);
+                book_info = JSON.stringify(data[key]);
+                book_info = book_info.replace(/'/g,"&#39");
+                //book_stuff = encodeURIComponent(book_info);
 
-		title = book['title'];
-		title = title.replace(/'/g,"&#39");
-		description = book['description'];
-			
-		author = book['author'];
+                //alert(book_info);
 
-		//sub_title = book['subtitle'];
-		image = book['imageLinks']['thumbnail'];
-
-		//need ID and to a variable to hold book json data. 
-		// json data would be data = data[key]
-		//pass data[key] through if user wants to add book to bookshelf
-		//need to check book ID with key in bookshelf to see if they match.
+                genre = data[key][3];
+                title = title.replace(/'/g,"&#39");
+                description = data[key][2];
+              description = description.replace(/'/g,"&#39");
 
 
-		//output = book_info['title'];
-		 document.getElementById("textResponse").innerHTML +=
-			"<div class = 'row'> <div class = 'col-sm-3'>"
-			+"<img class = 'card-img-top' src ='"+image+"'><br><br>"
-			+ "<center><form method='post' action ='javascript:AddBook("+book_id+")'>"
-			+"<input type = 'hidden' id = '"+book_id+"' value = '"+title+"'  data-book= '"+book_info+"'></input>"
 
-			+"<button type='submit'  class = 'btn btn-success'>Add To Book Shelf</button></form></center></div>"
-			+"<div class = 'col-sm-9'> <h1> "+ title + "</h1>"
+                image = data[key][1];
 
-			+ "<p>"
-			+ description + "</p><br>"
-		
-			+"</div></div><hr>";
-		
+                //need ID and to a variable to hold book json data.
+                // json data would be data = data[key]
+                //pass data[key] through if user wants to add book to bookshelf
+                //need to check book ID with key in bookshelf to see if they match.
 
-		}
-	//document.getElementById("textResponse").innerHTML = book_info;
+
+                //output = book_info['title'];
+                 document.getElementById("textResponse").innerHTML +=
+                        "<div class = 'row'> <div class = 'col-sm-3'>"
+                        +"<img class = 'card-img-top' src ='"+image+"'><br><br>"
+                        + "<center><form method='post' action ='javascript:AddBook("+book_id+")'>"
+                        +"<input type = 'hidden' id = '"+book_id+"' value = '"+title+"' data-genre = '"+genre+"' data-image = '"+image+"' data-description= '"+description+"'></input>"
+
+                        +"<button type='submit'  class = 'btn btn-success'>Add To Book Shelf</button></form></center></div>"
+                        +"<div class = 'col-sm-9'> <h1> "+ title + "</h1>"
+
+                        + "<p>"
+                        + description + "</p><br>"
+
+                        +"</div></div><hr>";
+
+
+                }
+        //document.getElementById("textResponse").innerHTML = book_info;
 
 }
-
-
-
 
 
 function search()
 {
 	var request = new XMLHttpRequest();
-	request.open("POST","search.php",true);
+	request.open("POST","rec.php",true);
 	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 	request.onreadystatechange= function ()
 	{
@@ -218,7 +212,10 @@ function search()
 			DisplayBooks(this.responseText);
 		}		
 	}
-	var search = document.getElementById("title").value;
+
+
+	//var search = document.getElementById("title").value;
+	let search = sessionStorage.getItem("rec");
 	request.send("type=search&search="+search);
 }
 
@@ -236,12 +233,12 @@ function search()
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav">
-                    <a href="home.html" class="nav-item nav-link active">Home</a>
-                    <a href="user.html" class="nav-item nav-link">Bookshelf</a>
+                    <a href="home2.html" class="nav-item nav-link">Home</a>
+                    <a href="user2.html" class="nav-item nav-link">Bookshelf</a>
                     <a href="phpBB3/index.php" class="nav-item nav-link">Forum</a>
                     <a href="goals.html" class="nav-item nav-link">Reading Goal</a>
-                
-
+	
+                  
 		</div>
                 <div class="navbar-nav ms-auto">
 			<a onclick = "logout()" href="#" class="nav-item nav-link">Logout</a>
@@ -263,33 +260,23 @@ function search()
 		<h1 id="user"></h1>
 			<script>
 			ShowUser();
+			search();
 			//alert (sessionStorage.getItem("username"));
 			</script>
 
 
-
-
+	<a href = "user2.html" class = "btn btn-success">Back To Bookshelf</a>
+	<br>
 	  <br>
 	  <div class = "card">   
 
 
 			  <div class = "card-body">
 
-			<h4 class = "card-title">Search for Books</h4>
+			<h4 class = "card-title">Recommendations</h4>
 	 
-<form method="POST" name = "lookup" id="lookup" autocomplete = "off" action="javascript:search()">
-<div class = "form-group">
 
-	<input type="text" class = "form-control" id="title" name="title" placeholder="Search Here">
-	
-	
-	<!--	
-	 <input type="text" class = "form-control" id="author" name="author" placeholder="Author"> --> 
- 
-<br> 
-  <button type = "submit" class = "btn btn-success">Search</button>
-</form>
-			  </div>
+			  
 
 
 

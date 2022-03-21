@@ -14,7 +14,7 @@ class rabbitMQServer
 	private $queue;
 	private $routing_key = '*';
 	private $exchange_type = "topic";
-	private $auto_delete = "true"; //was previously false originally.
+	private $auto_delete = "true";
 
 	function __construct($machine, $server = "rabbitMQ")
 	{
@@ -24,10 +24,6 @@ class rabbitMQServer
 		$this->USER     = $this->machine[$server]["USER"];
 		$this->PASSWORD = $this->machine[$server]["PASSWORD"];
 		$this->VHOST = $this->machine[$server]["VHOST"];
-		
-		//	$this->AUTO_DELETE = $this->machine[$server]["AUTO_DELETE"]; //new
-
-
 		if (isset( $this->machine[$server]["EXCHANGE_TYPE"]))
 		{
 			$this->exchange_type = $this->machine[$server]["EXCHANGE_TYPE"];
@@ -68,9 +64,6 @@ class rabbitMQServer
 				$params['login'] = $this->USER;
 				$params['password'] = $this->PASSWORD;
 				$params['vhost'] = $this->VHOST;
-				//$params['auto_delete'] = $this->$auto_delete; //also new
-
-
 				$conn = new AMQPConnection($params);
 				$conn->connect();
 				$channel = new AMQPChannel($conn);
@@ -163,9 +156,6 @@ class rabbitMQClient
 		$this->USER     = $this->machine[$server]["USER"];
 		$this->PASSWORD = $this->machine[$server]["PASSWORD"];
 		$this->VHOST = $this->machine[$server]["VHOST"];
-		
-		//$this->AUTO_DELETE = $this->machine[$server]["AUTO_DELETE"];
-
 		if (isset( $this->machine[$server]["EXCHANGE_TYPE"]))
 		{
 			$this->exchange_type = $this->machine[$server]["EXCHANGE_TYPE"];
@@ -210,8 +200,6 @@ class rabbitMQClient
 			$params['login'] = $this->USER;
 			$params['password'] = $this->PASSWORD;
 			$params['vhost'] = $this->VHOST;
-		
-			//$params['auto_delete'] = true; //this new stuff
 
 			$conn = new AMQPConnection($params);
 			$conn->connect();
@@ -224,7 +212,7 @@ class rabbitMQClient
 
 			$callback_queue = new AMQPQueue($channel);
 			$callback_queue->setName($this->queue."_response");
-			$callback_queue->declareQueue(); //source of error
+			$callback_queue->declareQueue();
 			$callback_queue->bind($exchange->getName(),$this->routing_key.".response");
 
 			$this->conn_queue = new AMQPQueue($channel);
@@ -233,10 +221,8 @@ class rabbitMQClient
 
 			$exchange->publish($json_message,$this->routing_key,AMQP_NOPARAM,array('reply_to'=>$callback_queue->getName(),'correlation_id'=>$uid));
 			$this->response_queue[$uid] = "waiting";
-			
 			$callback_queue->consume(array($this,'process_response'));
-			
-			
+
 			$response = $this->response_queue[$uid];
 			unset($this->response_queue[$uid]);
 			return $response;

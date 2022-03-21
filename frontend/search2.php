@@ -15,7 +15,7 @@ $response = "unsupported request type, politely FUCK OFF";
 switch ($request["type"])
 {
 	case "search":
-		$client = new rabbitMQClient("apiTest.ini","apiServer");
+		$client = new rabbitMQClient("sampleClient.ini","testServer");
 		$response = $client->send_request($request);
 		unset($client);
 	break;

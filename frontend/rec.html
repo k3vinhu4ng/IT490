@@ -202,13 +202,14 @@ function DisplayBooks(response)
 }
 
 
-
+let rec1 = sessionStorage.getItem("rec");
+//alert(rec1);
 
 
 function search()
 {
 	var request = new XMLHttpRequest();
-	request.open("POST","search.php",true);
+	request.open("POST","rec.php",true);
 	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 	request.onreadystatechange= function ()
 	{
@@ -218,7 +219,10 @@ function search()
 			DisplayBooks(this.responseText);
 		}		
 	}
-	var search = document.getElementById("title").value;
+
+
+	//var search = document.getElementById("title").value;
+	let search = sessionStorage.getItem("rec");
 	request.send("type=search&search="+search);
 }
 
@@ -236,12 +240,12 @@ function search()
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav">
-                    <a href="home.html" class="nav-item nav-link active">Home</a>
-                    <a href="user.html" class="nav-item nav-link">Bookshelf</a>
+                    <a href="home2.html" class="nav-item nav-link">Home</a>
+                    <a href="user2.html" class="nav-item nav-link">Bookshelf</a>
                     <a href="phpBB3/index.php" class="nav-item nav-link">Forum</a>
                     <a href="goals.html" class="nav-item nav-link">Reading Goal</a>
-                
-
+	
+                  
 		</div>
                 <div class="navbar-nav ms-auto">
 			<a onclick = "logout()" href="#" class="nav-item nav-link">Logout</a>
@@ -263,33 +267,23 @@ function search()
 		<h1 id="user"></h1>
 			<script>
 			ShowUser();
+			search();
 			//alert (sessionStorage.getItem("username"));
 			</script>
 
 
-
-
+	<a href = "user.html" class = "btn btn-success">Back To Bookshelf</a>
+	<br>
 	  <br>
 	  <div class = "card">   
 
 
 			  <div class = "card-body">
 
-			<h4 class = "card-title">Search for Books</h4>
+			<h4 class = "card-title">Recommendations</h4>
 	 
-<form method="POST" name = "lookup" id="lookup" autocomplete = "off" action="javascript:search()">
-<div class = "form-group">
 
-	<input type="text" class = "form-control" id="title" name="title" placeholder="Search Here">
-	
-	
-	<!--	
-	 <input type="text" class = "form-control" id="author" name="author" placeholder="Author"> --> 
- 
-<br> 
-  <button type = "submit" class = "btn btn-success">Search</button>
-</form>
-			  </div>
+			  
 
 
 
