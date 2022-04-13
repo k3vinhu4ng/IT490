@@ -20,7 +20,7 @@ public function __construct()
 	echo "correctly connected to database".PHP_EOL;
 }
 
-public function packages($type,$package,$version){
+public function packages($package,$version){
 	$ins = "INSERT INTO packages VALUES('$package','$version');";
 	$response = $this->testdb->query($ins);
 
@@ -30,7 +30,7 @@ public function rollback($badpkg, $badver){
 	$sel = "select * from packages where package = '$badpkg' and version < '$badver' order by version ASC limit 1;";
 	$response = $this->testdb->query($sel);
 	// execute shell script to rollback version
-	echo $response; 
+	return $response; 
 
 }
 
