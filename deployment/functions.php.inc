@@ -20,7 +20,7 @@ public function __construct()
 	echo "correctly connected to database".PHP_EOL;
 }
 
-public function packages($type,$package,$version){
+public function packages($package,$version){
 	$ins = "INSERT INTO packages VALUES('$package','$version');";
 $response = $this->testdb->query($ins);
 
