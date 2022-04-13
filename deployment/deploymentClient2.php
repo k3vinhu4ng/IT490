@@ -45,11 +45,13 @@ if ($type == 'zip'){
 }
 
 if ($type == 'rollback'){
+	$badpkg = readline("Bad package name? ");
 	$badver = readline("Bad version? ");
 	// select package below the version that's not working
 
 	$request = array();
 	$request['type'] = $type;
+	$request['badpkg'] = $badpkg;
 	$request['badver'] = $badver;
 
 }

@@ -11,9 +11,9 @@ function packages($type, $package, $version){
 	return $test->packages($type, $package, $version);
 }
 
-function rollback($badver){
+function rollback($badpkg, $badver){
 	$test = new testdb();
-	return $test->rollback($badver);
+	return $test->rollback($badpkg, $badver);
 }
 
 function requestProcessor($request)
@@ -29,7 +29,7 @@ function requestProcessor($request)
   case "zip":
       return packages($request['type'],$request['package'],$request['version']);
   case "rollback":
-	return rollback($request['badver']);
+	return rollback($request['badpkg'], $request['badver']);
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }

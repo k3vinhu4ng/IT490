@@ -26,8 +26,8 @@ public function packages($type,$package,$version){
 
 }
 
-public function rollback($package, $badver){
-	$sel = "select * from packages where package = '$package' and version < '$badver' order by version ASC limit 1;");
+public function rollback($badpkg, $badver){
+	$sel = "select * from packages where package = '$badpkg' and version < '$badver' order by version ASC limit 1;");
 	$response = $this->testdb->query($sel);
 	// execute shell script to rollback version
 	echo $response; 
