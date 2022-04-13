@@ -21,12 +21,12 @@ if ($testdb->errno != 0){
 
 $inc = "1";
 if ($type == 'zip'){
-	 $select = mysqli_query($testdb, "select * from packages where package = '$package'"    );
-	$package = readline("Package name: ");
+	 $package = readline("Package name: ");
+	 $select = mysqli_query($testdb, "select * from packages where packa    ge = '$package';");
 	if (mysqli_num_rows($select)>0){
-        	$select = mysqli_query($testdb, "select * from packages where package = '$package' order by version DESC");
-        	$row = mysqli_fetch_assoc($select);
-        	$version = $row['version'];
+        	$select2 = mysqli_query($testdb, "select * from packages where package = '$package' order by version DESC");
+        	$row = mysqli_fetch_assoc($select2);
+        	$vesion = $row['version'];
 		echo "This package already exists, creating version #" . ($version + $inc);
 	}
 	else{
