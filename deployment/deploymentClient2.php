@@ -17,10 +17,11 @@ if ($testdb->errno != 0){
 }
 
 
-$select = mysqli_query($testdb, "select * from packages where package = '$package'");
+//$select = mysqli_query($testdb, "select * from packages where package = '$package'");
 
 $inc = "1";
 if ($type == 'zip'){
+	 $select = mysqli_query($testdb, "select * from packages where package = '$package'"    );
 	$package = readline("Package name: ");
 	if (mysqli_num_rows($select)>0){
         	$select = mysqli_query($testdb, "select * from packages where package = '$package' order by version DESC");
