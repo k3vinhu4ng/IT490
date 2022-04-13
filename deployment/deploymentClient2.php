@@ -17,7 +17,7 @@ if ($testdb->errno != 0){
 }
 
 
-//$select = mysqli_query($testdb, "select * from packages where package = '$package'");
+$select = mysqli_query($testdb, "select * from packages where package = '$package'");
 
 $inc = "1";
 if ($type == 'zip'){
