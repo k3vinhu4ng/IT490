@@ -18,8 +18,9 @@
 
 
 #source package.ini
+[[-f "/home/winonapatrick/winonapatrick/testing/package.tar"]] || rm "/home/winonapatrick/winonapatrick/testing/package.tar"
 
-while read line; do echo $line; tar --append --file=/home/winonapatrick/winonapatrick/testing/package1.tar "$line" ; done < package.ini
+while read line; do echo $line; tar --append --file=/home/winonapatrick/winonapatrick/testing/package.tar "$line" ; done < package.ini
 
 #cat package.ini | sed -n "/^package/" | head -n-1
 #ps | sed -n '/^package/ {p;q}' package.ini
