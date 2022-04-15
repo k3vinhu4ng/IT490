@@ -10,23 +10,23 @@ $type = readline("Do you want to zip or rollback a package?: ");
 //$package = readline("Package name: ");
 
 
-$testdb = new mysqli('127.0.0.1','testUser','12345','testdb');
+$testdb = new mysqli('127.0.0.1','test','test','bookrex');
 if ($testdb->errno != 0){
         echo "Failed to connect to database: ".$testdb->error.PHP_EOL;
         exit(0);
 }
 
 
-//$select = mysqli_query($testdb, "select * from packages where package = '$package'");
+//$select = mysqli_query($testdb, "select * from packages where packages = '$package'");
 
 $inc = "1";
 if ($type == 'zip'){
-	 $package = readline("Package name: ");
-	 $select = mysqli_query($testdb, "select * from packages where packa    ge = '$package';");
+	$package = readline("Package name: ");
+	$select = mysqli_query($testdb, "select * from packages where packages = '$package'");
 	if (mysqli_num_rows($select)>0){
-        	$select2 = mysqli_query($testdb, "select * from packages where package = '$package' order by version DESC");
-        	$row = mysqli_fetch_assoc($select2);
-        	$vesion = $row['version'];
+        	$select = mysqli_query($testdb, "select * from packages where packages = '$package' order by version DESC");
+        	$row = mysqli_fetch_assoc($select);
+        	$version = $row['version'];
 		echo "This package already exists, creating version #" . ($version + $inc);
 	}
 	else{
@@ -38,7 +38,9 @@ if ($type == 'zip'){
 	$request['package'] = $package;
 	$request['version'] = $version + $inc;
 
-	rename("/home/winonapatrick/winonapatrick/testing/package.tar","/home/winonapatrick/winonapatrick/testing/".$request['package'].$request['version'].".tar");
+	rename("/home/cristina/realtest/package.tar","/home/cristina/realtest/".$request['package'].$request['version'].".tar");
+
+	exec('./backup.sh');
 
 	exec('./deploy.sh ');
 
@@ -46,9 +48,8 @@ if ($type == 'zip'){
 }
 
 if ($type == 'rollback'){
-	$badpkg = readline("Bad package name? ");
+	$badpkg = readline("Bad package? ");
 	$badver = readline("Bad version? ");
-	// select package below the version that's not working
 
 	$request = array();
 	$request['type'] = $type;

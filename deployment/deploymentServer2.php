@@ -6,9 +6,9 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 require_once('functions.php.inc');
 
-function packages($package, $version){
+function packages($type, $package, $version){
 	$test = new testdb();
-	return $test->packages($package, $version);
+	return $test->packages($type, $package, $version);
 }
 
 function rollback($badpkg, $badver){
@@ -27,7 +27,7 @@ function requestProcessor($request)
   switch ($request['type'])
   {
   case "zip":
-      return packages($request['package'],$request['version']);
+      return packages($request['type'],$request['package'],$request['version']);
   case "rollback":
 	return rollback($request['badpkg'], $request['badver']);
   }
