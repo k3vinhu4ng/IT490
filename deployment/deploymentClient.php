@@ -39,10 +39,16 @@ if ($type == 'zip'){
 	rename("/home/winonapatrick/winonapatrick/testing/package.tar","/home/winonapatrick/winonapatrick/testing/".$request['package'].$request['version'].".tar");
 
 	exec('./deploy.sh ');
-
+	exec('./qaPull.sh');
+	//first script scp the package from dev to deployment
+	//second script scp the pack from deployment to QA... hopefully
 
 }
 
 $client = new rabbitMQClient("deployment.ini","testServer");
 $response = $client->send_request($request);
+$client2 = new rabbitMQClient("QA.ini","testServer");
+//new client for QA server...
+$response2 = $client2->send_request($request);
+// send to QA server 
 ?>
