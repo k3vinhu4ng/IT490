@@ -37,7 +37,7 @@ if ($type == 'zip'){
 	$request['version'] = $version + $inc;
 
 	rename("/home/winonapatrick/winonapatrick/testing/package.tar","/home/winonapatrick/winonapatrick/testing/".$request['package'].$request['version'].".tar");
-
+	//exec('./backup.sh '); call script to cp the newly named package to backups
 	exec('./deploy.sh ');
 	exec('./qaPull.sh');
 	//first script scp the package from dev to deployment

@@ -7,6 +7,8 @@ require_once('rabbitMQLib.inc');
 require_once('functions.php.inc');
 
 function qaPush($package, $version){
+	//exec(./'extract.sh);
+	//^^^^so here, call the script to extract the package
 	//i do not know what to put here... not sure 
 	//that it's even necessary
 	//help...
