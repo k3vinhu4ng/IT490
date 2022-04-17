@@ -20,10 +20,16 @@ public function __construct()
 	echo "correctly connected to database".PHP_EOL;
 }
 
-public function packages($package,$version){
-	$ins = "INSERT INTO packages VALUES('$package','$version');";
+public function packages($package,$version, $status){
+	$ins = "INSERT INTO packages VALUES('$package','$version', '$status');";
 $response = $this->testdb->query($ins);
 
 }
+public function rollback($package,$version, $status){
+        $ins = "INSERT INTO packages VALUES('$package','$version', '$status');";
+$response = $this->testdb->query($ins);
+
+}
+
 }
 ?>

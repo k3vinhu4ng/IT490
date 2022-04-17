@@ -24,7 +24,8 @@ if ($type == 'zip'){
 	if (mysqli_num_rows($select)>0){
         	$select = mysqli_query($testdb, "select * from packages where package = '$package' order by version DESC");
         	$row = mysqli_fetch_assoc($select);
-        	$version = $row['version'];
+		$version = $row['version'];
+		$status = 'Working';
 		echo "This package already exists, creating version #" . ($version + $inc);
 	}
 	else{
@@ -34,8 +35,8 @@ if ($type == 'zip'){
 	$request = array();
 	$request['type'] = $type;
 	$request['package'] = $package;
+	$request['status'] = $status;
 	$request['version'] = $version + $inc;
-
 	rename("/home/winonapatrick/winonapatrick/testing/package.tar","/home/winonapatrick/winonapatrick/testing/".$request['package'].$request['version'].".tar");
 	//exec('./backup.sh '); call script to cp the newly named package to backups
 	exec('./deploy.sh ');
@@ -45,6 +46,27 @@ if ($type == 'zip'){
 
 }
 
+if ($type == 'rollback'){
+	$select = mysqli_query($testdb, "select package FROM packages where package = '$package' order by version DESC LIMIT 1");
+	$row = mysqli_fetch_assoc($select);
+	$status = 'Not working';
+//	$version = idk how to set version from the query cris help 
+
+	$request = array();
+        $request['type'] = $type;
+	$request['package'] = $package;
+        $request['version'] = $version;
+	$request['status'] = $status;
+
+	if ($row){
+		echo "Rollback complete.";
+	}
+	//	exec('./rollback.sh); 
+	//	// so here you'd have a script that i guess finds it and sends it to deploymen...
+	//	i feel like it would be easier to just ask which version to roll back to so we can just send that
+	//	idk
+
+}
 $client = new rabbitMQClient("deployment.ini","testServer");
 $response = $client->send_request($request);
 $client2 = new rabbitMQClient("QA.ini","testServer");

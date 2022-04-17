@@ -6,10 +6,16 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 require_once('functions.php.inc');
 
-function packages($package, $version){
+function packages($package, $version, $status){
 	$test = new testdb();
-	return $test->packages($package, $version);
+	return $test->packages($package, $version, $status);
 }
+
+function rollback($package, $version, $status){
+        $test = new testdb();
+        return $test->packages($package, $version, $status);
+}
+
 
 function requestProcessor($request)
 {
@@ -22,8 +28,12 @@ function requestProcessor($request)
   switch ($request['type'])
   {
   case "zip":
-      return packages($request['package'],$request['version']);
+      return packages($request['package'],$request['version'], $request['status']);
   }
+  case "rollback":
+      return rollback($request['package'],$request['version'], $request['status']);
+  }
+
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
 
