@@ -21,7 +21,7 @@ public function __construct()
 }
 
 public function packages($package,$version){
-	$ins = "INSERT INTO packages VALUES('$package','$version');";
+	$ins = "INSERT INTO packages VALUES('$package','$version','testing');";
 	$response = $this->testdb->query($ins);
 
 	$sel = "select * from packages where packages = '$package' and version = '$version';";
@@ -65,7 +65,10 @@ public function rollback($badpkg, $badver){
 	//echo $rollpkg . PHP_EOL;
 	
 	// pass package and version as args for shell script
-	shell_exec("./rollback.sh $rollpkg");	
+	shell_exec("./rollback.sh $rollpkg");
+
+	$upd = "update packages set status = 'BAD' where packages = '$badpkg' and version = '$badver';";
+	$updresponse = $this->testdb->query($upd);	
 
 	// need to also change status in table to bad yeaaaa
 	// after deleting bad pkg in temp folder
