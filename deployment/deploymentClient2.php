@@ -10,7 +10,7 @@ $type = readline("Do you want to zip or rollback a package?: ");
 //$package = readline("Package name: ");
 
 
-$testdb = new mysqli('127.0.0.1','test','test','bookrex');
+$testdb = new mysqli('25.81.36.24','test','test','bookrex');
 if ($testdb->errno != 0){
         echo "Failed to connect to database: ".$testdb->error.PHP_EOL;
         exit(0);
