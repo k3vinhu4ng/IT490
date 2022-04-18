@@ -21,7 +21,7 @@ public function __construct()
 }
 
 public function packages($package,$version){
-	$ins = "INSERT INTO packages VALUES('$package','$version','testing');";
+	$ins = "INSERT INTO packages VALUES('$package','$version','GOOD');";
 	$response = $this->testdb->query($ins);
 
 	$sel = "select * from packages where packages = '$package' and version = '$version';";
@@ -55,21 +55,29 @@ public function rollback($badpkg, $badver){
 	//echo implode(",", mysqli_fetch_array($response));
 	// execute shell script to rollback version
 	//echo $response;
-	$result = mysqli_fetch_array($response);
-        $package = $result['packages']; 
-        $version = $result['version'];  
+	//$result = mysqli_fetch_array($response);
+        //$package = $result['packages']; 
+        //$version = $result['version'];  
         //echo $package;
 	//echo $version;
 	//echo $package . $version;
-	$rollpkg = $package . $version . ".tar";
+	//$rollpkg = $package . $version . ".tar";
 	//echo $rollpkg . PHP_EOL;
 	
 	// pass package and version as args for shell script
-	shell_exec("./rollback.sh $rollpkg");
+	//shell_exec("./rollback.sh $rollpkg");
 
 	$upd = "update packages set status = 'BAD' where packages = '$badpkg' and version = '$badver';";
-	$updresponse = $this->testdb->query($upd);	
+	$updresponse = $this->testdb->query($upd);
 
+	$sel2 = "select * from packages where packages = '$badpkg' and version < '$badver' order by version desc limit 1;";
+	$response2 = $this->testdb->query($sel2);	
+	$result = mysqli_fetch_array($response2);
+	$package = $result['packages'];
+	$version = $result['version'];
+	$rollpkg = $package . $version . ".tar";
+
+	shell_exec("./rollback.sh $rollpkg");
 	// need to also change status in table to bad yeaaaa
 	// after deleting bad pkg in temp folder
 	// use previous working version (select from packages where status = good)
