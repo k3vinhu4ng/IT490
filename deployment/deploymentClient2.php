@@ -10,7 +10,7 @@ $type = readline("Do you want to zip or rollback a package?: ");
 //$package = readline("Package name: ");
 
 
-$testdb = new mysqli('25.81.36.24','test','test','bookrex');
+$testdb = new mysqli('25.81.36.24:3306','test','test','bookrex');
 if ($testdb->errno != 0){
         echo "Failed to connect to database: ".$testdb->error.PHP_EOL;
         exit(0);
@@ -38,7 +38,7 @@ if ($type == 'zip'){
 	$request['package'] = $package;
 	$request['version'] = $version + $inc;
 
-	rename("/home/cristina/realtest/package.tar","/home/cristina/realtest/".$request['package'].$request['version'].".tar");
+	rename("/home/winonapatrick/winonapatrick/testing/package.tar","/home/winonapatrick/winonapatrick/testing/".$request['package'].$request['version'].".tar");
 
 	exec('./backup.sh');
 
