@@ -10,7 +10,7 @@ private $testdb;
 
 public function __construct()
 {
-	$this->testdb = new mysqli("25.81.36.24","test","test","bookrex");
+	$this->testdb = new mysqli("127.0.0.1","test","test","bookrex");
 
 	if ($this->testdb->connect_errno != 0)
 	{

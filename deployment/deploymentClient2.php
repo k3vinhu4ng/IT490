@@ -40,7 +40,7 @@ if ($type == 'zip'){
 
 	rename("/home/winonapatrick/winonapatrick/testing/package.tar","/home/winonapatrick/winonapatrick/testing/".$request['package'].$request['version'].".tar");
 
-	exec('./backup.sh');
+	//exec('./backup.sh');
 
 	exec('./deploy.sh ');
 
