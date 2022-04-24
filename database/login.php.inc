@@ -168,10 +168,12 @@ public function validateLogin($username,$password)
 	$statement = "select * from users where userid = '$un'";
 	$response = $this->logindb->query($statement);
 
+	$hashedpw = $this->hashPW($pw);
+
 	while ($row = $response->fetch_assoc())
 	{
 		echo "checking password for $username".PHP_EOL;
-		if ($row["password"] == $pw)
+		if ($row["password"] == $hashedpw)
 		{
 			echo "passwords match for $username".PHP_EOL;
 
@@ -200,18 +202,26 @@ public function validateLogin($username,$password)
 
 
 
+public function hashPW($pw)
+{
+	$hashedpw = sha1($pw);
+	return $hashedpw;
+}
+
+
 public function createUser($username,$password)
 {
 	$un = $this->logindb->real_escape_string($username);
 	$pw = $this->logindb->real_escape_string($password);
 	
-	
+	$hashedpw = $this->hashPW($pw);
+
 	$check = "select * from users where userid = '$un';";
 	$checkuser = $this->logindb->query($check);
 
 	if(mysqli_num_rows($checkuser) == 0) {
 		echo "user does not exist can register";
-		$insert = "insert into users values ('$un','$pw');";
+		$insert = "insert into users values ('$un','$hashedpw');";
 		$response = $this->logindb->query($insert);
 		return 1;
 	}
@@ -221,6 +231,25 @@ public function createUser($username,$password)
 	}
 }
 
+
+public function updatePassword($username, $password)
+{
+	$un = $this->logindb->real_escape_string($username);
+	$pw = $this->logindb->real_escape_string($password);
+	
+	$hashedpw = $this->hashPW($pw);
+
+	$update = "update users set password = '$hashedpw' where userid = '$un'";
+	$response = $this->logindb->query($update);
+	 echo "SQL INSERT :";
+
+         echo mysqli_errno($this->logindb).PHP_EOL;
+
+	return 1;
+	
+
+
+}
 
 public function searchQuery($search)
 {
@@ -475,6 +504,77 @@ public function db_add_book1($username,$book_id, $image, $genre, $description)
 		return 0;
 	}
 }
+
+
+public function add_review($username,$subject,$message) {
+	  $un = $this->logindb->real_escape_string($username);
+        $subject = $this->logindb->real_escape_string($subject);
+        $message = $this->logindb->real_escape_string($message);
+
+
+        $insert="insert into forum(userid, subject, post)  values('$un','$subject','$message');";
+        $action = $this->logindb->query($insert);
+                echo mysqli_errno($this->logindb).PHP_EOL;
+                echo "0 = successfully added".PHP_EOL;
+                return 1;
+
+}
+
+public function get_forum($username) {
+
+        // $un = $this->logindb->real_escape_string($username);
+        $select = "select * from forum;";
+
+        echo "Fetching forum".PHP_EOL;
+	$data = $this->logindb->query($select);
+
+	 if(mysqli_num_rows($data) == 0) {
+               echo "Oops...Forum is empty:(".PHP_EOL;
+
+                return 0;
+	 }
+	 else {
+		 $result=array();
+		while ($row=mysqli_fetch_array($data)) {
+			array_push($result, [$row['username'], $row['subject'], $row['message']]);
+			echo "pushing data".PHP_EOL;
+			
+		}
+                return $result;
+	 }
+
+  
+}
+
+public function dbPostForum($username, $post)
+{
+	$un = $this->logindb->real_escape_string($username);
+	$post_clean = $this->logindb->real_escape_string($post);
+	
+	$insert = "insert into FORUM(userid, post, time) values ($username, $post, NOW())";
+	$action = $this->logindb->query($insert);
+	//return mysql_fetch_array($checkbook);
+
+	//$bookshelf = array();
+
+	//while ($row = mysql
+	$result = array();
+
+	while($row = mysqli_fetch_array($checkbook))
+	{
+		
+		//echo $row['BOOK'].PHP_EOL;
+		array_push($result, [$row['BOOK'], $row['LIKE_VALUE']]);	
+	
+	}
+	//echo implode("|", $result);
+	//echo "returning json encoded results".PHP_EOL;
+	return $result;
+}
+
+
+
+
 
 
 
