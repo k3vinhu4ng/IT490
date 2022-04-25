@@ -21,7 +21,7 @@ public function __construct()
 }
 
 public function packages($package,$version){
-	$ins = "INSERT INTO packages VALUES('$package','$version','GOOD');";
+	$ins = "INSERT INTO packages VALUES('$package','$version','TESTING');";
 	$response = $this->testdb->query($ins);
 
 	$sel = "select * from packages where packages = '$package' and version = '$version';";
@@ -31,19 +31,7 @@ public function packages($package,$version){
         $version = $result['version'];
         $depkg = $package . $version . ".tar";
 
-        shell_exec("./expkg.sh $depkg");
-
-
-}
-
-public function qaPush($package, $version) {
-	$sel = "select * from packages where packages = '$package' and version = '$version';";
-	$response = $this->testdb->query($sel);
-	$result = mysqli_fetch_array($response);
-	$package = $result['packages'];
-	$version = $result['version'];
-	$depkg = $package . $version . ".tar";
-
+	shell_exec('./backup.sh');
 	shell_exec("./expkg.sh $depkg");
 
 
@@ -85,11 +73,21 @@ public function rollback($badpkg, $badver){
 
 }
 
+public function change($package, $version){
+	$upd = "update packages set status = 'GOOD' where packages = '$package' and version = '$version';";
+        $updresponse = $this->testdb->query($upd);
+
+}
+
 // script that moves pkg from temp folder and extract it in this folder
 // cd into directory that came from pkg 
 // cp everything in there to the var 
 // cp /path/to/temp/* /var/www/sample 
 // pkg should be deleted in temp in the rollback function 
+
+
+// depending on layer, execute a certain script
+// if $layer is QA, then execute the QA script to zip or rollback 
 
 }
 ?>

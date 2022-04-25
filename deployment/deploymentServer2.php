@@ -11,14 +11,14 @@ function packages($package, $version){
 	return $test->packages($package, $version);
 }
 
-function qaPush($package, $version){
-	$test = new testdb();
-	return $test->qaPush($package, $version);
-}
-
 function rollback($badpkg, $badver){
 	$test = new testdb();
 	return $test->rollback($badpkg, $badver);
+}
+
+function change($package, $version){
+	$test = new testdb();
+        return $test->change($package, $version);
 }
 
 function requestProcessor($request)
@@ -32,10 +32,11 @@ function requestProcessor($request)
   switch ($request['type'])
   {
   case "zip":
-	  return packages($request['package'],$request['version']);
-//	  return qaPush($request['package'],$request['version']);
+	  return packages($request['package'], $request['version']);
   case "rollback":
 	return rollback($request['badpkg'], $request['badver']);
+  case "change":
+	return change($request['package'], $request['version']);  
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
