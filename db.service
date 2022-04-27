@@ -13,7 +13,7 @@ After=network.target
 After=rabbitmq-server.service
 
 [Service]
-ExecStart=/usr/bin/php /home/winonapatrick/git/IT490/database/testRabbitMQServer.php
+ExecStart=/usr/bin/php /home/kevin/temp/backend/testRabbitMQServer.php
 
 [Install]
 WantedBy=multi-user.target
