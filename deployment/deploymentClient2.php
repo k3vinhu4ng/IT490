@@ -35,13 +35,12 @@ if ($type == 'zip'){
 	$request['type'] = $type;
 	$request['package'] = $package;
 	$request['version'] = $version + $inc;
-	$request['layer'] = $lay;
+	$request['lay'] = $lay;
 	$request['vm'] = $vm;
 
 	rename("/home/winonapatrick/winonapatrick/testing/package.tar","/home/winonapatrick/winonapatrick/testing/".$request['package'].$request['version'].".tar");
 
-	//exec('./backup.sh');
-
+	// scp files from dev layer to deployment server 
 	exec('./deploy.sh ');
 
 
@@ -58,7 +57,7 @@ if ($type == 'rollback'){
 	$request['type'] = $type;
 	$request['badpkg'] = $badpkg;
 	$request['badver'] = $badver;
-	$request['layer'] = $lay;
+	$request['lay'] = $lay;
         $request['vm'] = $vm;
 
 }

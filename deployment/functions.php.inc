@@ -37,23 +37,9 @@ public function packages($package,$version){
 
 }
 
-public function rollback($badpkg, $badver){
-	$sel = "select * from packages where packages = '$badpkg' and version = '$badver';";
-	$response = $this->testdb->query($sel);
-	//echo implode(",", mysqli_fetch_array($response));
-	// execute shell script to rollback version
-	//echo $response;
-	//$result = mysqli_fetch_array($response);
-        //$package = $result['packages']; 
-        //$version = $result['version'];  
-        //echo $package;
-	//echo $version;
-	//echo $package . $version;
-	//$rollpkg = $package . $version . ".tar";
-	//echo $rollpkg . PHP_EOL;
-	
-	// pass package and version as args for shell script
-	//shell_exec("./rollback.sh $rollpkg");
+public function rollback($badpkg, $badver, $lay, $vm){
+//	$sel = "select * from packages where packages = '$badpkg' and version = '$badver';";
+//	$response = $this->testdb->query($sel);
 
 	$upd = "update packages set status = 'BAD' where packages = '$badpkg' and version = '$badver';";
 	$updresponse = $this->testdb->query($upd);
@@ -65,29 +51,42 @@ public function rollback($badpkg, $badver){
 	$version = $result['version'];
 	$rollpkg = $package . $version . ".tar";
 
-	shell_exec("./rollback.sh $rollpkg");
-	// need to also change status in table to bad yeaaaa
-	// after deleting bad pkg in temp folder
-	// use previous working version (select from packages where status = good)
-	// copy file to correct directory and extract 
+//	shell_exec("./rollback.sh $rollpkg");
 
+	if ($lay == 'QA'){
+		if ($vm == 'Frontend'){
+			shell_exec("./rollbackFEQA.sh $rollpkg");
+		}
+		if ($vm == 'Backend'){
+			shell_exec("./rollbackDBQA.sh $rollpkg");
+		}
+		if ($vm == 'API'){
+			shell_exec("./rollbackAPIQA.sh $rollpkg");
+		}
+	}	
+	if ($lay == 'Prod'){
+		if ($vm == 'Frontend'){
+                        shell_exec("./rollbackFEProd.sh $rollpkg");
+                }
+                if ($vm == 'Backend'){
+                        shell_exec("./rollbackDBProd.sh $rollpkg");
+                }
+                if ($vm == 'API'){
+                        shell_exec("./rollbackAPIProd.sh $rollpkg");
+                }
+	}
 }
 
 public function change($package, $version){
+	// change initial status from TESTING to GOOD 
 	$upd = "update packages set status = 'GOOD' where packages = '$package' and version = '$version';";
-        $updresponse = $this->testdb->query($upd);
+	$updresponse = $this->testdb->query($upd);
+	echo "Changed status of package to GOOD.".PHP_EOL;
 
 }
 
-// script that moves pkg from temp folder and extract it in this folder
-// cd into directory that came from pkg 
-// cp everything in there to the var 
-// cp /path/to/temp/* /var/www/sample 
-// pkg should be deleted in temp in the rollback function 
-
-
 // depending on layer, execute a certain script
-// if $layer is QA, then execute the QA script to zip or rollback 
+// if $lay is QA, then execute the QA script to zip or rollback 
 
 }
 ?>
