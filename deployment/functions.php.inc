@@ -20,7 +20,7 @@ public function __construct()
 	echo "correctly connected to database".PHP_EOL;
 }
 
-public function packages($package,$version){
+public function packages($package,$version, $lay, $vm){
 	$ins = "INSERT INTO packages VALUES('$package','$version','TESTING');";
 	$response = $this->testdb->query($ins);
 
@@ -32,8 +32,31 @@ public function packages($package,$version){
         $depkg = $package . $version . ".tar";
 
 	shell_exec('./backup.sh');
-	shell_exec("./expkg.sh $depkg");
+//	shell_exec("./expkg.sh $depkg");
 
+	if ($lay == 'QA'){
+                if ($vm == 'Frontend'){
+                        shell_exec("./deployFEQA.sh $rollpkg");
+                }
+                if ($vm == 'Backend'){
+                        shell_exec("./deployDBQA.sh $rollpkg");
+                }
+                if ($vm == 'API'){
+                        shell_exec("./deployAPIQA.sh $rollpkg");
+                }
+	}
+
+        if ($lay == 'Prod'){
+                if ($vm == 'Frontend'){
+                        shell_exec("./deployFEProd.sh $rollpkg");
+                }
+                if ($vm == 'Backend'){
+                        shell_exec("./deployDBProd.sh $rollpkg");
+                }
+                if ($vm == 'API'){
+                        shell_exec("./deployAPIProd.sh $rollpkg");
+                }
+        }
 
 }
 
