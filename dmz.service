@@ -11,7 +11,7 @@ After=network.target
 After=rabbitmq-server.service
 
 [Service]
-ExecStart=/usr/bin/php /home/winonapatrick/git/IT490/dmz/serverAPI3.php
+ExecStart=/usr/bin/php /home/temp/dmz/serverAPI3.php
 
 [Install]
 WantedBy=multi-user.target
