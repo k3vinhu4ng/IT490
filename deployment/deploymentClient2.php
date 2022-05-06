@@ -38,7 +38,7 @@ if ($type == 'zip'){
 	$request['lay'] = $lay;
 	$request['vm'] = $vm;
 
-	rename("/home/winonapatrick/winonapatrick/testing/package.tar","/home/winonapatrick/winonapatrick/testing/".$request['package'].$request['version'].".tar");
+	rename("/home/kevin/testing/package.tar","/home/kevin/testing/".$request['package'].$request['version'].".tar");
 
 	// scp files from dev layer to deployment server 
 	exec('./deploy.sh ');

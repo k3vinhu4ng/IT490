@@ -1,10 +1,3 @@
 #!/bin/bash
 
-#this line removes the package
-sshpass -p 'password490' ssh kevin@25.81.19.5 'cd ~/temp; cp ~/testtar/\'$1' ./; tar -xf \'$1'; cd ~/tempfiles; cp ~/temp/*/* ./; echo 'password' | sudo -S systemctl restart dmz.service'
-
-#need to remove the files that came from bad package 
-
-#need to scp to put pack working version
-
-
+sshpass -p 'password490' ssh winonaVM3@25.11.71.89 'cd ~/temp; echo 'password490' | sudo -S cp ~/testtar/\'$1' ./; tar -xf \'$1'; cd ~/tempfiles; sudo cp ~/temp/*/* ./; echo 'password490' | sudo -S cp dmz.service /usr/bin/; sudo cp dmz.service /etc/systemd/system/; echo 'password490' | sudo -S systemctl restart dmz.service'

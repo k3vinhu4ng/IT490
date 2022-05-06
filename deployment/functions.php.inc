@@ -36,25 +36,29 @@ public function packages($package,$version, $lay, $vm){
 
 	if ($lay == 'QA'){
                 if ($vm == 'Frontend'){
-                        shell_exec("./deployFEQA.sh $rollpkg");
+                        shell_exec("./deployFEQA.sh $depkg");
                 }
                 if ($vm == 'Backend'){
-                        shell_exec("./deployDBQA.sh $rollpkg");
+                        shell_exec("./deployDBQA.sh $depkg");
                 }
                 if ($vm == 'API'){
-                        shell_exec("./deployAPIQA.sh $rollpkg");
+                        shell_exec("./deployAPIQA.sh $depkg");
                 }
 	}
 
         if ($lay == 'Prod'){
-                if ($vm == 'Frontend'){
-                        shell_exec("./deployFEProd.sh $rollpkg");
+		$upd = "update packages set status = 'GOOD' where packages = '$package' and version = '$version';";
+        	$updresponse = $this->testdb->query($upd);
+        	echo "Changed status of package to GOOD.".PHP_EOL;
+
+		if ($vm == 'Frontend'){
+                        shell_exec("./deployFEProd.sh $depkg");
                 }
                 if ($vm == 'Backend'){
-                        shell_exec("./deployDBProd.sh $rollpkg");
+                        shell_exec("./deployDBProd.sh $depkg");
                 }
                 if ($vm == 'API'){
-                        shell_exec("./deployAPIProd.sh $rollpkg");
+                        shell_exec("./deployAPIProd.sh $depkg");
                 }
         }
 
@@ -74,8 +78,6 @@ public function rollback($badpkg, $badver, $lay, $vm){
 	$version = $result['version'];
 	$rollpkg = $package . $version . ".tar";
 
-//	shell_exec("./rollback.sh $rollpkg");
-
 	if ($lay == 'QA'){
 		if ($vm == 'Frontend'){
 			shell_exec("./rollbackFEQA.sh $rollpkg");
@@ -87,17 +89,7 @@ public function rollback($badpkg, $badver, $lay, $vm){
 			shell_exec("./rollbackAPIQA.sh $rollpkg");
 		}
 	}	
-	if ($lay == 'Prod'){
-		if ($vm == 'Frontend'){
-                        shell_exec("./rollbackFEProd.sh $rollpkg");
-                }
-                if ($vm == 'Backend'){
-                        shell_exec("./rollbackDBProd.sh $rollpkg");
-                }
-                if ($vm == 'API'){
-                        shell_exec("./rollbackAPIProd.sh $rollpkg");
-                }
-	}
+	
 }
 
 public function change($package, $version){
@@ -107,9 +99,6 @@ public function change($package, $version){
 	echo "Changed status of package to GOOD.".PHP_EOL;
 
 }
-
-// depending on layer, execute a certain script
-// if $lay is QA, then execute the QA script to zip or rollback 
 
 }
 ?>

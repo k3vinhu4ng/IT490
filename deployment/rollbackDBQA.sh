@@ -1,10 +1,3 @@
 #!/bin/bash
 
-# need to change service so that the path is this one
-sshpass -p 'password490' ssh kevin@25.81.19.5 'cd ~/temp; cp ~/testtar/\'$1' ./; tar -xf \'$1'; cd ~/tempfiles; cp ~/temp/*/* ./; echo 'password' | sudo -S systemctl restart db.service'
-
-#need to remove the files that came from bad package 
-
-#need to scp to put pack working version
-
-
+sshpass -p 'password490' ssh winonaVM2@25.65.205.84 'cd ~/temp; echo 'password490' | sudo -S cp ~/testtar/\'$1' ./; tar -xf \'$1'; cd ~/database; echo 'password490' | sudo -S cp db.service /usr/bin; sudo cp db.service /etc/systemd/system/; echo 'password490' | sudo -S systemctl restart db.service'
