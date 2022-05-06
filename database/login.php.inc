@@ -251,6 +251,62 @@ public function updatePassword($username, $password)
 
 }
 
+
+
+public function updateUsername($username, $new_user)
+{
+	$un = $this->logindb->real_escape_string($username);
+	$new = $this->logindb->real_escape_string($new_user);
+
+
+
+	$check = "select * from users where userid = '$new';";
+	$checkuser = $this->logindb->query($check);
+
+	if(mysqli_num_rows($checkuser) == 0) {
+		echo "user does not exist. allow username change";
+		
+		$update = "update users set userid = '$new' where userid = '$un'";
+		$response = $this->logindb->query($update);
+	 	echo "SQL INSERT :";
+
+         	echo mysqli_errno($this->logindb).PHP_EOL;
+
+
+	$update = "update BOOKSHELF1 set userid = '$new' where userid = '$un'";
+	$response = $this->logindb->query($update);
+	 echo "SQL INSERT :";
+
+         echo mysqli_errno($this->logindb).PHP_EOL;
+
+
+	$update = "update GOALS set userid = '$new' where userid = '$un'";
+	$response = $this->logindb->query($update);
+	 echo "SQL INSERT :";
+
+         echo mysqli_errno($this->logindb).PHP_EOL;
+
+
+	$update = "update SESSIONS set userid = '$new' where userid = '$un'";
+	$response = $this->logindb->query($update);
+	 echo "SQL INSERT :";
+
+         echo mysqli_errno($this->logindb).PHP_EOL;
+
+
+	return 1;
+	}
+	else{
+		echo "user exists. cannot change username";
+		return 0;
+	}
+
+
+
+}
+
+
+
 public function searchQuery($search)
 {
 	$search_term = $this->logindb->real_escape_string($search);

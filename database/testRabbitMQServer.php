@@ -127,7 +127,22 @@ function setLike1($username, $title, $like){
 	return $login->updateLike1($username, $title, $like);
 }
 
+function postForum($username,$subject, $post){
+	$login = new loginDB();
+	return $login->add_review($username, $subject, $post);
+}
 
+function changePassword($username, $password){
+
+	$login = new loginDB();
+	return $login->updatePassword($username, $password);
+}
+
+function changeUser($username, $new_user){
+
+	$login = new loginDB();
+	return $login->updateUsername($username, $new_user);
+}
 
 
 
@@ -183,6 +198,17 @@ function requestProcessor($request)
     case "like":
 	    return setLike1($request['user'], $request['title'], $request['like']);
 	    break;
+    case "addReview":
+	    return postForum($request['user'], $request['subject'], $request['message']);
+	    break;
+
+	case "password":
+		return changePassword($request['user'], $request['password']);
+		break;
+	case "changeuser":
+		return changeUser($request['user'], $request['newuser']);
+		break;
+
 
 
   }
