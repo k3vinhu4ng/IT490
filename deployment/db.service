@@ -4,9 +4,9 @@ Description=db server
 Requires=network-online.target
 Requires=mysql.service
 Requires=rabbitmq-server.service
-Requires=/home/cristina/git/IT490/database/rabbitMQLib.inc
-Requires=/home/cristina/git/IT490/database/login.php.inc
-Requires=/home/cristina/git/IT490/database/path.inc
+Requires=/home/temp/database/rabbitMQLib.inc
+Requires=/home/temp/database/login.php.inc
+Requires=/home/temp/database/path.inc
 
 After=network-online.target
 After=network.target
