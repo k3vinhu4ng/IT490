@@ -36,16 +36,20 @@ public function packages($package,$version, $lay, $vm){
 
 	if ($lay == 'QA'){
                 if ($vm == 'FE'){
-                        shell_exec("./deployFEQA.sh $depkg");
+			shell_exec("./deployFEQA.sh $depkg");
+			echo "Pushed to QA - FE".PHP_EOL;
                 }
 		elseif ($vm == 'BE'){
-                        shell_exec("./deployDBQA.sh $depkg");
+			shell_exec("./deployDBQA.sh $depkg");
+			echo "Pushed to QA - BE".PHP_EOL;
                 }
 		elseif ($vm == 'API'){
-                        shell_exec("./deployAPIQA.sh $depkg");
+			shell_exec("./deployAPIQA.sh $depkg");
+			echo "Pushed to QA - API".PHP_EOL;
                 }
 	}
-
+	
+	// this probs won't be needed since it would be done in the change function automatically, but i'll leave this here for now....
 	elseif ($lay == 'Prod'){
 		if ($vm == 'FE'){
                         shell_exec("./deployFEProd.sh $depkg");
@@ -61,9 +65,6 @@ public function packages($package,$version, $lay, $vm){
 }
 
 public function rollback($badpkg, $badver, $vm){
-//	$sel = "select * from packages where packages = '$badpkg' and version = '$badver';";
-//	$response = $this->testdb->query($sel);
-
 	$upd = "update packages set status = 'BAD' where packages = '$badpkg' and version = '$badver';";
 	$updresponse = $this->testdb->query($upd);
 
@@ -76,12 +77,15 @@ public function rollback($badpkg, $badver, $vm){
 
 	if ($vm == 'FE'){
 		shell_exec("./rollbackFEQA.sh $rollpkg");
+		echo "Rolled back to previous working version.".PHP_EOL;
 	}
 	elseif ($vm == 'BE'){
 		shell_exec("./rollbackDBQA.sh $rollpkg");
+		echo "Rolled back to previous working version.".PHP_EOL;
 	}
 	elseif ($vm == 'API'){
 		shell_exec("./rollbackAPIQA.sh $rollpkg");
+		echo "Rolled back to previous working version.".PHP_EOL;
 	}
 		
 	
