@@ -1,0 +1,17 @@
+more search options (categories)
+
+bookclub feature...weekly book schedule (virtual book club)
+- chatroom where they can discuss
+- synchronous 
+- integrate a chatroom platform 
+- free chat libraries for website 
+
+friends list 
+- contact people and ask for book recommendations
+
+profile page where user can edit their stats
+- delete account 
+- change password 
+- change username 
+
+
