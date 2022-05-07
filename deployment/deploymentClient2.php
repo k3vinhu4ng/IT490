@@ -86,11 +86,13 @@ if ($type == 'rollback'){
 if ($type == 'change'){
 	$package = readline("Package name: ");	
 	$version = readline("Version number: ");
+	$vm = readline("FE, BE, or API?: ");
 	
 	$request = array();
         $request['type'] = $type;
         $request['package'] = $package;
 	$request['version'] = $version;
+	$request['vm'] = $vm;
 
 	echo "Updated status of package.".PHP_EOL;
 

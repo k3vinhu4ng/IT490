@@ -47,10 +47,6 @@ public function packages($package,$version, $lay, $vm){
 	}
 
 	elseif ($lay == 'Prod'){
-		$upd = "update packages set status = 'GOOD' where packages = '$package' and version = '$version';";
-        	$updresponse = $this->testdb->query($upd);
-        	echo "Changed status of package to GOOD.".PHP_EOL;
-
 		if ($vm == 'FE'){
                         shell_exec("./deployFEProd.sh $depkg");
                 }
@@ -91,11 +87,32 @@ public function rollback($badpkg, $badver, $vm){
 	
 }
 
-public function change($package, $version){
+public function change($package, $version, $vm){
 	// change initial status from TESTING to GOOD 
 	$upd = "update packages set status = 'GOOD' where packages = '$package' and version = '$version';";
 	$updresponse = $this->testdb->query($upd);
 	echo "Changed status of package to GOOD.".PHP_EOL;
+
+	$sel = "select * from packages where packages = '$package' and version = '$version';";
+        $response = $this->testdb->query($sel);
+        $result = mysqli_fetch_array($response);
+        $package = $result['packages'];
+        $version = $result['version'];
+	$depkg = $package . $version . ".tar";
+
+	if ($vm == 'FE'){
+		shell_exec("./deployFEProd.sh $depkg");
+		echo "Deployed to Frontend.".PHP_EOL;
+        }
+        elseif ($vm == 'BE'){
+		shell_exec("./deployDBProd.sh $depkg");
+		echo "Deployed to Backend.".PHP_EOL;
+        }
+        elseif ($vm == 'API'){
+                shell_exec("./deployAPIProd.sh $depkg");
+		echo "Deployed to API.".PHP_EOL;
+	}
+
 
 }
 
