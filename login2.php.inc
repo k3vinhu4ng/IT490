@@ -267,23 +267,6 @@ public function searchQuery($search)
 
 		echo mysqli_errno($this->logindb).PHP_EOL;
 
-		echo "api data stored in database".PHP_EOL;
-		return $response;
-		//return 1;
-
-	}
-	else{
-		echo "accessing database for book records".PHP_EOL;
-		$rows = array();
-		while ($r = mysqli_fetch_array($checksearch))
-		{
-			$answer = $r['RESULT'];
-		}
-		//echo $answer;
-		$data = json_decode($answer, true);
-		return $data;
-		//return 0;
-	}
 }
 
 

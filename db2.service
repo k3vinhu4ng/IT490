@@ -1,0 +1,19 @@
+[Unit]
+Description=db server
+
+Requires=network-online.target
+Requires=mysql.service
+Requires=rabbitmq-server.service
+Requires=/home/winonapatrick/git/IT490/database/rabbitMQLib.inc
+Requires=/home/winonapatrick/git/IT490/database/login.php.inc
+Requires=/home/winonapatrick/git/IT490/database/path.inc
+
+After=network-online.target
+After=network.target
+After=rabbitmq-server.service
+
+[Service]
+ExecStart=/usr/bin/php /home/temp/database/backend/testRabbitMQServer.php
+
+[Install]
+WantedBy=multi-user.target
