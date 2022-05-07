@@ -3,3 +3,7 @@
 Winona Patrick
 
 Viktoriya Buldiak
+
+Cristina Blanquera
+
+Kalsoom Khan

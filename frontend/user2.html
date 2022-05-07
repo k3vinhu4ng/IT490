@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/styles.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script type = "text/javascript"></script>
+<title>Book Rex</title>
+  </head>
+
+<script>
+
+
+
+
+
+
+function like(id_like)
+{
+	
+	
+	var request = new XMLHttpRequest();
+        request.open("POST","like.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+       request.onreadystatechange= function ()
+        {
+                
+                if ((this.readyState == 4)&&(this.status == 200))
+                {
+       			let button_change = id_like.dataset.output;
+			//alert (button_change);
+			//alert (button_change.length);
+			if (button_change.length == 3)
+			{
+				let dislike = button_change + '1';
+				document.getElementById(dislike).className = "btn btn-outline-danger";
+				document.getElementById(button_change).className = "btn btn-primary";
+			}
+			if (button_change.length ==4)
+			{
+				  document.getElementById(button_change).className = "btn btn-danger";
+                                document.getElementById(button_change.substring(0,3)).className = "btn btn-outline-primary";
+
+
+
+
+			}
+                }               
+        }
+
+        //alert(book_id);
+	let title1 = id_like.value;
+        let like_data = id_like.dataset.like;
+        let user3 = sessionStorage.getItem("username");
+       
+	request.send("type=like&user="+user3+"&title="+title1+"&like="+like_data);
+
+}
+
+
+function logout()
+{
+//alert(book_id.value);
+        var request = new XMLHttpRequest();
+        request.open("POST","logout.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+       request.onreadystatechange= function ()
+        {
+                
+                if ((this.readyState == 4)&&(this.status == 200))
+                {
+                sessionStorage.clear();
+                window.location.href = "index.html";    
+        
+                }               
+        }
+
+        //alert(book_id);
+        let user2 = sessionStorage.getItem("username");
+        request.send("type=logout&user="+user2);
+
+
+
+
+}
+
+
+
+
+function ShowUser()
+{
+        //let userdisplay = sessionStorage.getItem("username");
+        //document.getElementById("user").innerHTML = userdisplay;
+
+        var request = new XMLHttpRequest();
+        request.open("POST","validate.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+       request.onreadystatechange= function ()
+        {
+
+                if ((this.readyState == 4)&&(this.status == 200))
+                {
+                      // alert(this.responseText);
+                        sessionResponse(this.responseText);
+
+                }
+        }
+
+        let user1 = sessionStorage.getItem("username");
+        let sessionID1 = sessionStorage.getItem("sessionID");
+
+        request.send("type=validate_session&user="+user1+"&sessionID="+sessionID1);
+
+
+
+}
+
+
+
+function sessionResponse(response)
+{
+        var validate = String(JSON.parse(response));
+//      document.getElementById("textResponse").innerHTML = response+"<p>";     
+        if (validate == '1'){
+                
+                let userdisplay = sessionStorage.getItem("username");
+                document.getElementById("user").innerHTML = userdisplay + '\'s Book Shelf';
+               
+        }
+        else {
+                alert("Please Login.");
+               window.location.href = "index.html";
+}
+
+
+}
+
+
+
+
+
+
+function DisplayBooks(response)
+{
+	var response = JSON.parse(response);
+	book = response;
+	//alert(book);
+
+	let rec_list = []
+
+
+	for (var key in book) {
+		//title = data['title'];
+		id_like = "i"+key;
+		id_dislike = "i2"+key;
+		id_like_button = "i3"+key;
+		id_dislike_button = "i3"+key+"1";
+
+
+
+		title = book[key][0];
+		//title = title.replace(/\\"/g, '');
+		title = title.replace(/'/g,"&#39");
+
+		description = book[key][2];
+	        description = description.replace(/\\"/g, '');
+
+		image = book[key][1];
+		button_display_value = book[key][4];
+		//alert(button_display_value);
+
+
+		genre = book[key][3];
+		//alert(genre);
+		rec_list.push(genre);
+	//	alert(rec_list);
+
+		document.getElementById("textResponse").innerHTML += 
+
+
+	                        "<div class = 'row'> <div class = 'col-sm-3'>"
+                        +"<img class = 'card-img-top' src ='"+image+"'><br><br>"
+			+ "<center>  <form method='post' action ='javascript:like("+id_like+")' style = 'float:left'>"
+                        +"<input type = 'hidden' id = '"+id_like+"' value = '"+title+"' data-like = 'yes' data-output = '"+id_like_button+"'></input>"
+
+			+"<button type='submit' id = '"+id_like_button+"' class = 'btn btn-outline-primary'>&#128077;</button></form>"
+
+
+			+ "<form method='post' action ='javascript:like("+id_dislike+")' style = 'float:right'>"
+                        +"<input type = 'hidden' id = '"+id_dislike+"' value = '"+title+"' data-like = 'no' data-output = '"+id_dislike_button+"'></input>"
+
+			+"<button type='submit' id = '"+id_dislike_button+"' class = 'btn btn-outline-danger'>&#128078;</button></form></center></div>"
+
+
+                        +"<div class = 'col-sm-9'> <h1> "+ title + "</h1>"
+
+                        + "<p>"
+                        + description + "</p><br>"
+                        +"</div></div><hr>";
+
+			if (button_display_value == 'yes')
+			{
+			document.getElementById(id_like_button).className = 'btn btn-primary';
+			}
+
+			if (button_display_value == 'no')
+			{
+			document.getElementById(id_dislike_button).className = 'btn btn-danger';
+			}
+
+		}
+
+	//alert(rec_list);
+
+	let list_length = rec_list.length;
+	let random_index = Math.floor(Math.random() * list_length);
+	//alert(rec_list[random_index]);
+	let rec_item = rec_list[random_index];
+
+	sessionStorage.setItem("rec", rec_item);
+}
+
+
+
+
+function showBooks()
+{
+	var request = new XMLHttpRequest();
+	request.open("POST","bookshelf.php",true);
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	request.onreadystatechange= function ()
+	{
+		
+		if ((this.readyState == 4)&&(this.status == 200))
+		{
+			DisplayBooks(this.responseText);
+		}		
+	}
+	var userid = sessionStorage.getItem("username");
+
+	request.send("type=bookshelf&user="+userid);
+}
+
+</script>
+
+
+<div class="m-4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a href="#" class="navbar-brand">BookRex
+                <img src="assets/logo.png" height= "45" width = "45" alt="BookRex">
+            </a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav">
+                    <a href="home2.html" class="nav-item nav-link">Home</a>
+                    <a href="user2.html" class="nav-item nav-link active">Bookshelf</a>
+                    <a href="phpBB3/index.php" class="nav-item nav-link">Forum</a>
+                     <a href="goals.html" class="nav-item nav-link">Reading Goal</a>
+
+
+                                    </div>
+                <div class="navbar-nav ms-auto">
+                    <a onclick = "logout()" href="#" class="nav-item nav-link">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+
+
+
+<script>showBooks();</script>
+
+
+<div class = "container">
+        <body class = "bg-light">
+
+		<h1 id="user"></h1>
+			
+		<script>
+				ShowUser();
+			//alert (sessionStorage.getItem("username"));
+			</script>
+
+
+			<a href = "rec2.html" class = "btn btn-success">View Recommendations</a>
+
+			<br>	 
+<br>
+<div id="textResponse">
+</div>
+
+
+
+
+		  
+
+		  </div>
+	  </div>
+
+	
+</body>
+
+
+
+
+
+</div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  
+
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>
+
+

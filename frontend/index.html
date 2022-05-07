@@ -15,10 +15,17 @@
 
 function HandleLoginResponse(response)
 {
-	var login = String(JSON.parse(response));
+	var login = JSON.parse(response);
+	var username = document.getElementById("username").value;
 //	document.getElementById("textResponse").innerHTML = response+"<p>";	
-	if (login == '1'){
-		window.location.href = "home.html";
+	if (login[0] == username){
+		//var username1 = document.getElementById("username").value;
+		sessionStorage.clear();
+		sessionStorage.setItem("username", login[0]);
+		sessionStorage.setItem("sessionID", login[1]);
+		
+		//alert(sessionStorage.getItem("username"));
+		window.location.href = "home2.html";
 	}
 	else {
 		document.getElementById("textResponse").style.display = "block";
