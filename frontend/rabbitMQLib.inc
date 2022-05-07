@@ -14,7 +14,7 @@ class rabbitMQServer
 	private $queue;
 	private $routing_key = '*';
 	private $exchange_type = "topic";
-	private $auto_delete = false;
+	private $auto_delete = "true";
 
 	function __construct($machine, $server = "rabbitMQ")
 	{
@@ -212,7 +212,7 @@ class rabbitMQClient
 
 			$callback_queue = new AMQPQueue($channel);
 			$callback_queue->setName($this->queue."_response");
-			$callback_queue->declare();
+			$callback_queue->declareQueue();
 			$callback_queue->bind($exchange->getName(),$this->routing_key.".response");
 
 			$this->conn_queue = new AMQPQueue($channel);

@@ -14,18 +14,80 @@
 <script>
 
 
+function logout()
+{
+//alert(book_id.value);
+        var request = new XMLHttpRequest();
+        request.open("POST","logout.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+       request.onreadystatechange= function ()
+        {
+                
+                if ((this.readyState == 4)&&(this.status == 200))
+                {
+                sessionStorage.clear();
+		window.location.href = "index.html";	
+	
+                }               
+        }
+
+	//alert(book_id);
+	user = sessionStorage.getItem("username");
+	request.send("type=logout&user="+user);
+
+
+
+
+}
+
 function ShowUser()
 {
-	let userdisplay = sessionStorage.getItem("username");
-	document.getElementById("user").innerHTML = userdisplay;
+	//let userdisplay = sessionStorage.getItem("username");
+	//document.getElementById("user").innerHTML = userdisplay;
+
+        var request = new XMLHttpRequest();
+        request.open("POST","validate.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+       request.onreadystatechange= function ()
+        {
+                
+                if ((this.readyState == 4)&&(this.status == 200))
+                {
+                      // alert(this.responseText);
+			sessionResponse(this.responseText);
+				
+                }               
+        }
+
+	user = sessionStorage.getItem("username");
+	sessionID = sessionStorage.getItem("sessionID");
+
+	request.send("type=validate_session&user="+user+"&sessionID="+sessionID);
+
+
+
 }
 
 
-//$("button").click(function()
-//	{
-//	var fired_button = $(this.val);
-//	alert(fired_button);
-//	});
+
+
+function sessionResponse(response)
+{
+        var validate = String(JSON.parse(response));
+//      document.getElementById("textResponse").innerHTML = response+"<p>";     
+        if (validate == '1'){
+                
+                let userdisplay = sessionStorage.getItem("username");
+                document.getElementById("user").innerHTML = "Hello " +userdisplay;
+               
+        }
+        else {
+		alert("Please Login.");
+               window.location.href = "index.html";
+}
+
+
+}
 
 
 function bookshelf_response(response)
@@ -35,7 +97,7 @@ function bookshelf_response(response)
         if (add_response == '1'){
                 alert ("Book added.");
         }
-        else {
+        if (add_response == '0'){
                alert ("Book already in Book Shelf.");
 }
 
@@ -109,7 +171,7 @@ function DisplayBooks(response)
 			
 		author = book['author'];
 
-		sub_title = book['subtitle'];
+		//sub_title = book['subtitle'];
 		image = book['imageLinks']['thumbnail'];
 
 		//need ID and to a variable to hold book json data. 
@@ -130,7 +192,7 @@ function DisplayBooks(response)
 
 			+ "<p>"
 			+ description + "</p><br>"
-			+ book_id + "<br>"
+		
 			+"</div></div><hr>";
 		
 
@@ -176,10 +238,13 @@ function search()
                 <div class="navbar-nav">
                     <a href="home.html" class="nav-item nav-link active">Home</a>
                     <a href="user.html" class="nav-item nav-link">Bookshelf</a>
-                    <a href="#" class="nav-item nav-link">Forum</a>
-                                    </div>
+                    <a href="phpBB3/index.php" class="nav-item nav-link">Forum</a>
+                    <a href="goals.html" class="nav-item nav-link">Reading Goal</a>
+                
+
+		</div>
                 <div class="navbar-nav ms-auto">
-                    <a href="index.html" class="nav-item nav-link active">Login</a>
+			<a onclick = "logout()" href="#" class="nav-item nav-link">Logout</a>
                 </div>
             </div>
         </div>
@@ -195,7 +260,7 @@ function search()
 <div class = "container">
         <body class = "bg-light">
 
-		<div id="user"></div>
+		<h1 id="user"></h1>
 			<script>
 			ShowUser();
 			//alert (sessionStorage.getItem("username"));
@@ -204,11 +269,9 @@ function search()
 
 
 
-	  <br><br>
+	  <br>
 	  <div class = "card">   
-		  <div class = "card-header bg-success text-light">
-		 Welcome To Book Rex.
-		  </div>
+
 
 			  <div class = "card-body">
 
@@ -217,9 +280,9 @@ function search()
 <form method="POST" name = "lookup" id="lookup" autocomplete = "off" action="javascript:search()">
 <div class = "form-group">
 
-	<input type="text" class = "form-control" id="title" name="title" placeholder="Search Title">
+	<input type="text" class = "form-control" id="title" name="title" placeholder="Search Here">
 	
-	<br>
+	
 	<!--	
 	 <input type="text" class = "form-control" id="author" name="author" placeholder="Author"> --> 
  

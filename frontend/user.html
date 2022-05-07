@@ -14,11 +14,132 @@
 <script>
 
 
+
+
+
+
+function like(id_like)
+{
+	
+	
+	var request = new XMLHttpRequest();
+        request.open("POST","like.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+       request.onreadystatechange= function ()
+        {
+                
+                if ((this.readyState == 4)&&(this.status == 200))
+                {
+       			let button_change = id_like.dataset.output;
+			//alert (button_change);
+			//alert (button_change.length);
+			if (button_change.length == 3)
+			{
+				let dislike = button_change + '1';
+				document.getElementById(dislike).className = "btn btn-outline-danger";
+				document.getElementById(button_change).className = "btn btn-primary";
+			}
+			if (button_change.length ==4)
+			{
+				  document.getElementById(button_change).className = "btn btn-danger";
+                                document.getElementById(button_change.substring(0,3)).className = "btn btn-outline-primary";
+
+
+
+
+			}
+                }               
+        }
+
+        //alert(book_id);
+	let title1 = id_like.value;
+        let like_data = id_like.dataset.like;
+        let user3 = sessionStorage.getItem("username");
+       
+	request.send("type=like&user="+user3+"&title="+title1+"&like="+like_data);
+
+}
+
+
+function logout()
+{
+//alert(book_id.value);
+        var request = new XMLHttpRequest();
+        request.open("POST","logout.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+       request.onreadystatechange= function ()
+        {
+                
+                if ((this.readyState == 4)&&(this.status == 200))
+                {
+                sessionStorage.clear();
+                window.location.href = "index.html";    
+        
+                }               
+        }
+
+        //alert(book_id);
+        let user2 = sessionStorage.getItem("username");
+        request.send("type=logout&user="+user2);
+
+
+
+
+}
+
+
+
+
 function ShowUser()
 {
-	let userdisplay = sessionStorage.getItem("username");
-	document.getElementById("user").innerHTML = userdisplay;
+        //let userdisplay = sessionStorage.getItem("username");
+        //document.getElementById("user").innerHTML = userdisplay;
+
+        var request = new XMLHttpRequest();
+        request.open("POST","validate.php",true);
+        request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+       request.onreadystatechange= function ()
+        {
+
+                if ((this.readyState == 4)&&(this.status == 200))
+                {
+                      // alert(this.responseText);
+                        sessionResponse(this.responseText);
+
+                }
+        }
+
+        let user1 = sessionStorage.getItem("username");
+        let sessionID1 = sessionStorage.getItem("sessionID");
+
+        request.send("type=validate_session&user="+user1+"&sessionID="+sessionID1);
+
+
+
 }
+
+
+
+function sessionResponse(response)
+{
+        var validate = String(JSON.parse(response));
+//      document.getElementById("textResponse").innerHTML = response+"<p>";     
+        if (validate == '1'){
+                
+                let userdisplay = sessionStorage.getItem("username");
+                document.getElementById("user").innerHTML = userdisplay + '\'s Book Shelf';
+               
+        }
+        else {
+                alert("Please Login.");
+               window.location.href = "index.html";
+}
+
+
+}
+
+
+
 
 
 
@@ -27,37 +148,79 @@ function DisplayBooks(response)
 	var response = JSON.parse(response);
 	book = response;
 	//alert(book);
+
+	let rec_list = []
+
+
 	for (var key in book) {
 		//title = data['title'];
-		id_key = "i"+key;
-		data = book[key];
+		id_like = "i"+key;
+		id_dislike = "i2"+key;
+		id_like_button = "i3"+key;
+		id_dislike_button = "i3"+key+"1";
+
+
+
+		data = book[key][0];
 		data = data.replace(/\\"/g, '');
 		result = JSON.parse(data);
 		title = result['title'];
 		title = title.replace(/'/g,"&#39");
 		description = result['description'];
 		image = result['imageLinks']['thumbnail'];
+		button_display_value = book[key][1];
+		//alert(button_display_value);
+
+
+		genre = result['categories'];
+		//alert(genre);
+		rec_list.push(genre);
+		//alert(rec_list);
 
 		document.getElementById("textResponse").innerHTML += 
 
 
 	                        "<div class = 'row'> <div class = 'col-sm-3'>"
                         +"<img class = 'card-img-top' src ='"+image+"'><br><br>"
-                        + "<center><form method='post' action =''>"
-                        +"<input type = 'hidden' id = '"+id_key+"' value = '"+title+"'></input>"
+			+ "<center>  <form method='post' action ='javascript:like("+id_like+")' style = 'float:left'>"
+                        +"<input type = 'hidden' id = '"+id_like+"' value = '"+title+"' data-like = 'yes' data-output = '"+id_like_button+"'></input>"
 
-                        +"<button type='submit'  class = 'btn btn-danger'>Remove</button></form></center></div>"
+			+"<button type='submit' id = '"+id_like_button+"' class = 'btn btn-outline-primary'>&#128077;</button></form>"
+
+
+			+ "<form method='post' action ='javascript:like("+id_dislike+")' style = 'float:right'>"
+                        +"<input type = 'hidden' id = '"+id_dislike+"' value = '"+title+"' data-like = 'no' data-output = '"+id_dislike_button+"'></input>"
+
+			+"<button type='submit' id = '"+id_dislike_button+"' class = 'btn btn-outline-danger'>&#128078;</button></form></center></div>"
+
+
                         +"<div class = 'col-sm-9'> <h1> "+ title + "</h1>"
 
                         + "<p>"
                         + description + "</p><br>"
                         +"</div></div><hr>";
 
-		
+			if (button_display_value == 'yes')
+			{
+			document.getElementById(id_like_button).className = 'btn btn-primary';
+			}
+
+			if (button_display_value == 'no')
+			{
+			document.getElementById(id_dislike_button).className = 'btn btn-danger';
+			}
 
 		}
-}
 
+	//alert(rec_list);
+
+	let list_length = rec_list.length;
+	let random_index = Math.floor(Math.random() * list_length);
+	//alert(rec_list[random_index]);
+	let rec_item = rec_list[random_index];
+
+	sessionStorage.setItem("rec", rec_item);
+}
 
 
 
@@ -96,10 +259,13 @@ function showBooks()
                 <div class="navbar-nav">
                     <a href="home.html" class="nav-item nav-link">Home</a>
                     <a href="user.html" class="nav-item nav-link active">Bookshelf</a>
-                    <a href="#" class="nav-item nav-link">Forum</a>
+                    <a href="phpBB3/index.php" class="nav-item nav-link">Forum</a>
+                     <a href="goals.html" class="nav-item nav-link">Reading Goal</a>
+
+
                                     </div>
                 <div class="navbar-nav ms-auto">
-                    <a href="index.html" class="nav-item nav-link active">Login</a>
+                    <a onclick = "logout()" href="#" class="nav-item nav-link">Logout</a>
                 </div>
             </div>
         </div>
@@ -115,16 +281,17 @@ function showBooks()
 <div class = "container">
         <body class = "bg-light">
 
-		<div id="user"></div>
-			<script>
-			ShowUser();
+		<h1 id="user"></h1>
+			
+		<script>
+				ShowUser();
 			//alert (sessionStorage.getItem("username"));
 			</script>
 
 
+			<a href = "rec.html" class = "btn btn-success">View Recommendations</a>
 
-
-	  <br><br>
+			<br>	 
 <br>
 <div id="textResponse">
 </div>

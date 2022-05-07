@@ -15,7 +15,14 @@ error_reporting(E_ALL);
 ini_set('error_log', 'log.txt');
 
 function logfunction($request){
-        $file = fopen("log.txt","r");
+
+	$fp = fopen("logHistory.txt", "a");
+	file_put_contents("logHistory.txt", $request, FILE_APPEND);
+	//	fwrite($fp, $request);
+	fclose($fp);
+}
+
+/*	$file = fopen("log.txt","r");
 //      $error = fgets($file);
        $errorArray = [];
         while(! feof($file)){
@@ -39,17 +46,26 @@ function logfunction($request){
 $request = array();
 $request['type'] = "idk";
 for($x = 0; $x < count($errorArray); $x++){
-        $request['error_string'] = $errorArray[$x];
-//      echo 'hello'; 
+	$request['error_string'] = $errorArray[$x];
+//$fp = fopen("logHistory2.txt", "a");
+           
 }
+  //    echo 'hello'; 
+//}
+
 }
+ */
 function requestProcessor($request)
 {
+var_dump($request);	
+//switch($request['type']){
+//case "dmz":
         echo "received request".PHP_EOL;
 
-         return logfunction($request);
-
-//return array("returnCode" => '0', 'message'=>"Server received request and processed");
+	return logfunction($request);
+	
+//}
+return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
 $server = new rabbitMQServer("log.ini","testServer");
 
@@ -59,3 +75,4 @@ echo "logMQServer END".PHP_EOL;
 exit();
 
 ?>
+
