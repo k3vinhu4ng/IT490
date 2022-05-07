@@ -14,7 +14,7 @@ if ($testdb->errno != 0){
 
 $inc = "1";
 if ($type == 'zip'){
-	exec('./zipPackage.sh');
+//	exec('./zipPackage.sh');
 	$package = readline("Package name: ");
 	$select = mysqli_query($testdb, "select * from packages where packages = '$package'");
 	if (mysqli_num_rows($select)>0){
@@ -29,19 +29,42 @@ if ($type == 'zip'){
 	}
 
 	$lay = readline("Which layer? QA or Prod?: ");
-	$vm = readline("Frontend, Backend, or API?: ");
+	$vm = readline("FE, BE, or API?: ");
 
 	$request = array();
-	$request['type'] = $type;
-	$request['package'] = $package;
-	$request['version'] = $version + $inc;
-	$request['lay'] = $lay;
+        $request['type'] = $type;
+        $request['package'] = $package;
+        $request['version'] = $version + $inc;
+        $request['lay'] = $lay;
 	$request['vm'] = $vm;
 
-	rename("/home/kevin/testing/package.tar","/home/kevin/testing/".$request['package'].$request['version'].".tar");
+	if ($lay == 'QA' && $vm == 'FE') {
+		exec('./zipFEQA.sh');
+		rename("/home/kevin/testing/package.tar","/home/kevin/testing/".$request['package'].$request['version'].".tar");	
+	}
+
+	elseif ($lay == 'QA' && $vm == 'BE') {
+		exec('./zipBEQA.sh');
+		rename("/home/kevin2/testing/package.tar","/home/kevin2/testing/".$request['package'].$request['version'].".tar");
+        }
+
+	elseif ($lay == 'QA' && $vm == 'API') {
+		exec('./zipAPIQA.sh');
+		rename("/home/kevin1/testing/package.tar","/home/kevin1/testing/".$request['package'].$request['version'].".tar");
+        }
 
 	// scp files from dev layer to deployment server 
-	exec('./deploy.sh ');
+	if ($vm == 'FE') {
+		exec('./scpFE.sh');
+	}
+
+	elseif ($vm == 'BE') {
+		exec('./scpBE.sh');
+	}
+
+	elseif ($vm == 'API') {
+		exec('./scpAPI.sh');
+	}
 
 
 }
@@ -50,14 +73,12 @@ if ($type == 'rollback'){
 	$badpkg = readline("Bad package? ");
 	$badver = readline("Bad version? ");
 
-	$lay = readline("Which layer? QA or Prod?: ");
-        $vm = readline("Frontend, Backend, or API?: ");
+        $vm = readline("FE, BE, or API?: ");
 
 	$request = array();
 	$request['type'] = $type;
 	$request['badpkg'] = $badpkg;
 	$request['badver'] = $badver;
-	$request['lay'] = $lay;
         $request['vm'] = $vm;
 
 }

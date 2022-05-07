@@ -35,36 +35,36 @@ public function packages($package,$version, $lay, $vm){
 //	shell_exec("./expkg.sh $depkg");
 
 	if ($lay == 'QA'){
-                if ($vm == 'Frontend'){
+                if ($vm == 'FE'){
                         shell_exec("./deployFEQA.sh $depkg");
                 }
-                if ($vm == 'Backend'){
+		elseif ($vm == 'BE'){
                         shell_exec("./deployDBQA.sh $depkg");
                 }
-                if ($vm == 'API'){
+		elseif ($vm == 'API'){
                         shell_exec("./deployAPIQA.sh $depkg");
                 }
 	}
 
-        if ($lay == 'Prod'){
+	elseif ($lay == 'Prod'){
 		$upd = "update packages set status = 'GOOD' where packages = '$package' and version = '$version';";
         	$updresponse = $this->testdb->query($upd);
         	echo "Changed status of package to GOOD.".PHP_EOL;
 
-		if ($vm == 'Frontend'){
+		if ($vm == 'FE'){
                         shell_exec("./deployFEProd.sh $depkg");
                 }
-                if ($vm == 'Backend'){
+		elseif ($vm == 'BE'){
                         shell_exec("./deployDBProd.sh $depkg");
                 }
-                if ($vm == 'API'){
+		elseif ($vm == 'API'){
                         shell_exec("./deployAPIProd.sh $depkg");
                 }
         }
 
 }
 
-public function rollback($badpkg, $badver, $lay, $vm){
+public function rollback($badpkg, $badver, $vm){
 //	$sel = "select * from packages where packages = '$badpkg' and version = '$badver';";
 //	$response = $this->testdb->query($sel);
 
@@ -78,17 +78,16 @@ public function rollback($badpkg, $badver, $lay, $vm){
 	$version = $result['version'];
 	$rollpkg = $package . $version . ".tar";
 
-	if ($lay == 'QA'){
-		if ($vm == 'Frontend'){
-			shell_exec("./rollbackFEQA.sh $rollpkg");
-		}
-		if ($vm == 'Backend'){
-			shell_exec("./rollbackDBQA.sh $rollpkg");
-		}
-		if ($vm == 'API'){
-			shell_exec("./rollbackAPIQA.sh $rollpkg");
-		}
-	}	
+	if ($vm == 'FE'){
+		shell_exec("./rollbackFEQA.sh $rollpkg");
+	}
+	elseif ($vm == 'BE'){
+		shell_exec("./rollbackDBQA.sh $rollpkg");
+	}
+	elseif ($vm == 'API'){
+		shell_exec("./rollbackAPIQA.sh $rollpkg");
+	}
+		
 	
 }
 
