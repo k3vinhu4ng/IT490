@@ -5,7 +5,7 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
 $type = readline("Do you want to zip, rollback, or change a package?: ");		
-$testdb = new mysqli('25.81.36.24','test2','test','bookrex');
+$testdb = new mysqli('25.81.36.24','test3','test','bookrex');
 if ($testdb->errno != 0){
         echo "Failed to connect to database: ".$testdb->error.PHP_EOL;
         exit(0);
