@@ -163,10 +163,18 @@ function DisplayBooks(response)
                 //alert(book_info);
 
                 genre = data[key][3];
-                title = title.replace(/'/g,"&#39");
-                description = data[key][2];
-              description = description.replace(/'/g,"&#39");
+                
+		if(title !== null)
+		{
+		title = title.replace(/'/g,"&#39");
+		}
+		description = data[key][2];
+             
 
+		if (description !== null)
+		{
+		description = description.replace(/'/g,"&#39");
+		}
 
 
                 image = data[key][1];
@@ -237,7 +245,12 @@ function search()
                     <a href="user2.html" class="nav-item nav-link">Bookshelf</a>
                     <a href="phpBB3/index.php" class="nav-item nav-link">Forum</a>
                     <a href="goals.html" class="nav-item nav-link">Reading Goal</a>
-	
+		
+	               <a href="http://www.sample.com/mychat/blabax/blabax.php" class="nav-item nav-link">Chat Room</a>
+               <a href="account.html" class="nav-item nav-link">Account</a>
+
+
+
                   
 		</div>
                 <div class="navbar-nav ms-auto">

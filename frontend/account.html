@@ -85,7 +85,7 @@ function sessionResponse(response)
         if (validate == '1'){
                 
                 let userdisplay = sessionStorage.getItem("username");
-                document.getElementById("user").innerHTML = userdisplay + '\'s Reading Goals';
+		document.getElementById("user").innerHTML = "Username: " + userdisplay;
                
         }
         else {
@@ -98,16 +98,38 @@ function sessionResponse(response)
 
 
 
+function usernameResponse(response)
+{
+        var userchange = String(JSON.parse(response));
+//      document.getElementById("textResponse").innerHTML = response+"<p>";     
+        if (userchange == '1'){
+
+                alert("Username succesfully changed.");
+		let new_id = document.getElementById("new_username").value;
+                sessionStorage.setItem("username", new_id);
+		document.getElementById("user").innerHTML = "Username: " + new_id;
+               
+        }
+        else {
+                alert("Username already exists.");
+               document.getElementById("new_username").value = "";
+}
+
+
+}
 
 
 
 
 
 
-function Submit_Goals()
+
+
+
+function Change_Password()
 {
         var request = new XMLHttpRequest();
-        request.open("POST","goals.php",true);
+        request.open("POST","password.php",true);
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
         request.onreadystatechange= function ()
         {
@@ -117,54 +139,77 @@ function Submit_Goals()
 
 
                         
-			var goals_output = document.getElementById("goals").value;
-			document.getElementById("showgoal").innerHTML = "Your goal is to read " + goals_output+ " books!";
-
-                        //show();
+			alert("Password Changed");
+			document.getElementById("password").value = "";
+                	document.getElementById("password2").value = "";
 
 
                 } 
         }
 		user = sessionStorage.getItem("username");
-		let goals_data = document.getElementById("goals").value;
-		request.send("type=goals&user="+user+"&goals="+goals_data);
+		let password_data = document.getElementById("password").value;
+		let password_confirm = document.getElementById("password2").value;
+
+       		 if (password_data ==''){
+        	alert("New Password cannot be empty.");
+       		 return;
+       		 }
+        	if (password_data !== password_confirm){
+       		 alert("Password did not confirm");
+       		 return;
+       		 }
+
+
+
+		request.send("type=password&user="+user+"&password="+password_data);
 
 
 
 }
 
-function DisplayGoals(response)
+
+
+
+function Change_Username()
 {
-	goals = JSON.parse(response);
-	//alert(test);
-	if (goals  == "0")
-	{
-       document.getElementById("showgoal").innerHTML = "You have not set any reading goals!";
-
-	}
-	else {
-	document.getElementById("showgoal").innerHTML = "Your goal is to read " + goals+ " books!";
-
-	}
-}
-
-
-function GetGoals(){
-
         var request = new XMLHttpRequest();
-        request.open("POST","getgoals.php",true);
+        request.open("POST","changeuser.php",true);
         request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
         request.onreadystatechange= function ()
         {
                 
                 if ((this.readyState == 4)&&(this.status == 200))
                 {
-			DisplayGoals(this.responseText);       
+
+
+                        usernameResponse(this.responseText);
+
+			//alert("Password Changed");
+
+
                 } 
         }
 		user = sessionStorage.getItem("username");
-		request.send("type=getgoals&user="+user);
+		let new_user = document.getElementById("new_username").value;
+		
+
+       		 if (new_user ==''){
+        	alert("New Username cannot be empty.");
+       		 return;
+       		 }
+		if (new_user == user)
+		{	
+		alert("Username is already "+user);
+		}
+
+
+
+		request.send("type=changeuser&user="+user+"&newuser="+new_user);
+
+
+
 }
+
 
 
 </script>
@@ -188,11 +233,10 @@ function GetGoals(){
                     <a href="home2.html" class="nav-item nav-link">Home</a>
                     <a href="user2.html" class="nav-item nav-link">Bookshelf</a>
                     <a href="phpBB3/index.php" class="nav-item nav-link">Forum</a>
-                    <a href="goals.html" class="nav-item nav-link active">Reading Goal</a>
-		   
-                              <a href="http://www.sample.com/mychat/blabax/blabax.php" class="nav-item nav-link">Chat Room</a>
-               <a href="account.html" class="nav-item nav-link">Account</a>
-
+                    <a href="goals.html" class="nav-item nav-link">Reading Goal</a>
+		               <a href="http://www.sample.com/mychat/blabax/blabax.php" class="nav-item nav-link">Chat Room</a>
+               <a href="account.html" class="nav-item nav-link active">Account</a>		   
+                
 		</div>
                 <div class="navbar-nav ms-auto">
                     <a onclick = "logout()" href="#" class="nav-item nav-link active">Logout</a>
@@ -205,58 +249,116 @@ function GetGoals(){
 
 
 	<script>
-	GetGoals();	
+		
 	ShowUser();
 	</script>
+
+
+
+
+
+
+
+	                          <script>
+                                  function F(){
+                                          var ptrPassword = document.getElementById("password");
+                                          var ptrPassword2 = document.getElementById("password2");
+                                          if (ptrPassword.type === "password")
+                                          {
+                                                  ptrPassword.type = "text";
+                                                  ptrPassword2.type = "text";
+                                          }
+                                          else {
+                                                  ptrPassword.type = "password";
+                                                  ptrPassword2.type = "password";
+                                                }
+                                  }
+
+                          </script>
 
 <div class = "container" id = "container">
 
         <body class = "bg-light">
 
-		<h1 id = "user"></h1>
           <div class = "card">
 
-                  <div class = "card-header bg-success text-light">
-                 Set a Reading Goal!
+                  <div class = "card-header">
+                 Account Information
                   </div>
 
                           <div class = "card-body">
 
-                        <h4 class = "card-title">How Many Books Would You Like to Read This Year?</h4>
-                <form method="POST" name = "goal" id="goal" autocomplete = "off" action="javascript:Submit_Goals()">
+                        <h4 class = "card-title" id = "user"></h4>
+                             </div>
+         
+
+
+	  </div>
+	  <br>	
+ <div class = "card">
+
+                  <div class = "card-header">
+                 Change Username
+                  </div>
+
+                          <div class = "card-body">
+
+                        <h4 class = "card-title" id = "user"></h4>
+                <form method="POST" name = "change_user" id="change_user" autocomplete = "off" action="javascript:Change_Username()">
 <div class = "form-group">
 
-              
-                <br>
-  <input type="number" placeholder="Pick a Number!" id="goals" name = "goals" min="1" max="50">
-  <br><br>
-  <button type = "submit" name="submit_goals" class = "btn btn-success" >Submit</button>
+                  
+
+
+                      <input type="text" class = "form-control" id="new_username" name="new_username" placeholder="New Username">
+
+		      <br>
+           
+  <button type = "submit" name="change_user" class = "btn btn-danger" >Change Username</button>
   </input>
-                </form>                   </div>
+</div>     </form>                  
           </div>
                   </div>
 
-</div>
-<div id = "test" class = "hide">
-        <div class = "container">
 
-        <body class = "bg-light">
 
-        <br><br>
-          <div class = "card">
 
-                  <div class = "card-header bg-success text-light">
-                 Your Reading Goal
+
+	  <br>
+ <div class = "card">
+
+                  <div class = "card-header">
+                 Change Password
                   </div>
 
                           <div class = "card-body">
 
-                        <h4 id = "showgoal" class = "card-title"></h4>
-                        <h5>Finish a book?</h5>
+                        <h4 class = "card-title" id = "user"></h4>
+                <form method="POST" name = "change" id="change" autocomplete = "off" action="javascript:Change_Password()">
+<div class = "form-group">
 
-                          </div>
-          </div>
-        </div>
+
+                      <input type="password" class = "form-control" id="password" name="password" placeholder="New Password">
+  <input type="password" class = "form-control" id="password2" name="password2" placeholder="Confirm New Password">
+
+        <input type = "checkbox" onclick="F()"> Show Password
+	<br>
+
+               
+  <button type = "submit" name="submit_goals" class = "btn btn-danger" >Change Password</button>
+  </input>
+</div>        </form>                   </div>
+        
+                  </div>
+
+
+	  <br>
+
+
+
+</div>
+
+
 
 </div>
 
