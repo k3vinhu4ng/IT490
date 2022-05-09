@@ -41,12 +41,14 @@ if ($type == 'zip'){
 	if ($lay == 'QA' && $vm == 'FE') {
 		exec('./zipFEQA.sh');
 		rename("/home/kevin/testing/package.tar","/home/kevin/testing/".$request['package'].$request['version'].".tar");	
+		exec('./scpFE.sh');
 	}
 
 	elseif ($lay == 'QA' && $vm == 'BE') {
 		exec('./zipBEQA.sh');
 		rename("/home/kevin2/testing/package.tar","/home/kevin2/testing/".$request['package'].$request['version'].".tar");
-        }
+		exec('./scpBE.sh');
+	}
 
 	elseif ($lay == 'QA' && $vm == 'API') {
 		exec('./zipAPIQA.sh');
