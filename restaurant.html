@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title> App </title>
+	<script src="restuurant.js"></script>
+	<link rel ="stylesheet" type= "text/css"  href="restuarant.css" />
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class = "title"><h1> Restaraunt App</h1> </div>
+		<form onsubmit="return validate();" action="connect.php" method="post" >
+			<div id ="first">
+				<label class="fnamelabel"> First Name:</label><br>
+				<input class= "fname"type="text"name="fname" id="firstName" placeholder="Example:John"><br>
+
+			</div>
+			<div id="last">
+				<label class="lnamelabel"> Last Name:</label><br>
+				<input class="lname" type="text" name="lname" id ="lastName" placeholder="Example:Doe"><br>
+			</div>
+			<div id="pword">
+				<label class="pwdlabel">Password:</label>
+				<input class ="pwd" type="password" id="pass" name="password"><br><br>
+			</div>
+			<div id="identification">
+				<label class="idLabel"> Username:</label><br>
+				<input class="idNumber" type="text" name="uname" id="ident"><br><br>
+			</div>
+			<div id= "phone">
+				<label class="phoneLabel"> Phone #:</label>
+				<input class= "number"type="tel"name="phone" id="tele" placeholder="Example:012-345-6789">
+			</div>
+			<div id="email">
+				<label class="emailLabel"> Email:</label>
+				<input class="address" type="email" name="mail" id="emailaddress">
+			</div>
+			
+			
+			<div id="submit">
+				<button type="submit">Submit</button>
+			</div id="reset">
+			<div id="reset">
+				<button type="reset">Reset</button>
+			</div>
+		</form>	
+	</div>
+		
+</body>
+</html>
