@@ -53,21 +53,8 @@ if ($type == 'zip'){
 	elseif ($lay == 'QA' && $vm == 'API') {
 		exec('./zipAPIQA.sh');
 		rename("/home/kevin1/testing/package.tar","/home/kevin1/testing/".$request['package'].$request['version'].".tar");
-        }
-
-	// scp files from dev layer to deployment server 
-	if ($vm == 'FE') {
-		exec('./scpFE.sh');
-	}
-
-	elseif ($vm == 'BE') {
-		exec('./scpBE.sh');
-	}
-
-	elseif ($vm == 'API') {
 		exec('./scpAPI.sh');
 	}
-
 
 }
 
