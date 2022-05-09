@@ -1,0 +1,17 @@
+[Unit]
+Description=dmz server
+
+Requires=network-online.target
+Requires=mysql.service
+Requires=rabbitmq-server.service
+Requires=/home/winonapatrick/git/IT490/database/rabbitMQLib.inc
+
+After=network-online.target
+After=network.target
+After=rabbitmq-server.service
+
+[Service]
+ExecStart=/usr/bin/php /home/temp/dmz/serverAPI3.php
+
+[Install]
+WantedBy=multi-user.target

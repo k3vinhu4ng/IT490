@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 
     require_once('path.inc');
     require_once('get_host_info.inc');
-    require_once('rabbitMQLib2.inc');
+    require_once('rabbitMQLib.inc');
 //require_once('log3.inc');
 
 
@@ -16,13 +16,13 @@ ini_set('error_log', 'log.txt');
 
 function logfunction($request){
 
-        $fp = fopen("logHistory.txt", "a");
-        file_put_contents("logHistory.txt", $request, FILE_APPEND);
-        //      fwrite($fp, $request);
-        fclose($fp);
+	$fp = fopen("logHistory.txt", "a");
+	file_put_contents("logHistory.txt", $request, FILE_APPEND);
+	//	fwrite($fp, $request);
+	fclose($fp);
 }
 
-/*      $file = fopen("log.txt","r");
+/*	$file = fopen("log.txt","r");
 //      $error = fgets($file);
        $errorArray = [];
         while(! feof($file)){
@@ -46,7 +46,7 @@ function logfunction($request){
 $request = array();
 $request['type'] = "idk";
 for($x = 0; $x < count($errorArray); $x++){
-        $request['error_string'] = $errorArray[$x];
+	$request['error_string'] = $errorArray[$x];
 //$fp = fopen("logHistory2.txt", "a");
            
 }
@@ -57,13 +57,13 @@ for($x = 0; $x < count($errorArray); $x++){
  */
 function requestProcessor($request)
 {
-var_dump($request);
+var_dump($request);	
 //switch($request['type']){
 //case "dmz":
         echo "received request".PHP_EOL;
 
-        return logfunction($request);
-
+	return logfunction($request);
+	
 //}
 return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }
@@ -76,4 +76,3 @@ exit();
 
 ?>
 
-~                  
