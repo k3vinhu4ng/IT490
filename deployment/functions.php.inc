@@ -32,7 +32,6 @@ public function packages($package,$version, $lay, $vm){
         $depkg = $package . $version . ".tar";
 
 	shell_exec('./backup.sh');
-//	shell_exec("./expkg.sh $depkg");
 
 	if ($lay == 'QA'){
                 if ($vm == 'FE'){
