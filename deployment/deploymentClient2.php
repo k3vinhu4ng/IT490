@@ -5,11 +5,7 @@ require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
 $type = readline("Do you want to zip, rollback, or change a package?: ");		
-<<<<<<< HEAD
-$testdb = new mysqli('25.81.36.24','test3','test','bookrex');
-=======
 $testdb = new mysqli('25.81.36.24','test4','test','bookrex');
->>>>>>> beebacaddc16ff7ba7c0462335d104e258ed209a
 if ($testdb->errno != 0){
         echo "Failed to connect to database: ".$testdb->error.PHP_EOL;
         exit(0);
@@ -45,32 +41,6 @@ if ($type == 'zip'){
 	if ($lay == 'QA' && $vm == 'FE') {
 		exec('./zipFEQA.sh');
 		rename("/home/kevin/testing/package.tar","/home/kevin/testing/".$request['package'].$request['version'].".tar");	
-<<<<<<< HEAD
-	}
-
-	elseif ($lay == 'QA' && $vm == 'BE') {
-		exec('./zipBEQA.sh');
-		rename("/home/kevin2/testing/package.tar","/home/kevin2/testing/".$request['package'].$request['version'].".tar");
-        }
-
-	elseif ($lay == 'QA' && $vm == 'API') {
-		exec('./zipAPIQA.sh');
-		rename("/home/kevin1/testing/package.tar","/home/kevin1/testing/".$request['package'].$request['version'].".tar");
-        }
-
-	// scp files from dev layer to deployment server 
-	if ($vm == 'FE') {
-		exec('./scpFE.sh');
-	}
-
-	elseif ($vm == 'BE') {
-		exec('./scpBE.sh');
-	}
-
-	elseif ($vm == 'API') {
-		exec('./scpAPI.sh');
-	}
-=======
 		exec('./scpFE.sh');
 	}
 
@@ -79,7 +49,6 @@ if ($type == 'zip'){
 		rename("/home/kevin2/testing/package.tar","/home/kevin2/testing/".$request['package'].$request['version'].".tar");
 		exec('./scpBE.sh');
 	}
->>>>>>> beebacaddc16ff7ba7c0462335d104e258ed209a
 
 	elseif ($lay == 'QA' && $vm == 'API') {
 		exec('./zipAPIQA.sh');
