@@ -11,14 +11,14 @@ function packages($package, $version, $lay, $vm){
 	return $test->packages($package, $version, $lay, $vm);
 }
 
-function rollback($badpkg, $badver, $lay, $vm){
+function rollback($badpkg, $badver, $vm){
 	$test = new testdb();
-	return $test->rollback($badpkg, $badver, $lay, $vm);
+	return $test->rollback($badpkg, $badver, $vm);
 }
 
-function change($package, $version){
+function change($package, $version, $vm){
 	$test = new testdb();
-        return $test->change($package, $version);
+        return $test->change($package, $version, $vm);
 }
 
 function requestProcessor($request)
@@ -34,9 +34,9 @@ function requestProcessor($request)
   case "zip":
 	  return packages($request['package'], $request['version'], $request['lay'], $request['vm']);
   case "rollback":
-	return rollback($request['badpkg'], $request['badver'], $request['lay'], $request['vm']);
+	return rollback($request['badpkg'], $request['badver'], $request['vm']);
   case "change":
-	return change($request['package'], $request['version']);  
+	return change($request['package'], $request['version'], $request['vm']);  
   }
   return array("returnCode" => '0', 'message'=>"Server received request and processed");
 }

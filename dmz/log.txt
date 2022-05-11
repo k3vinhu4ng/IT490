@@ -1,0 +1,51 @@
+[08-Mar-2022 22:18:38 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:20:00 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:21:59 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:23:31 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:23:42 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:25:31 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:25:55 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:28:59 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:30:08 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:31:30 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:33:33 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:35:13 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:36:26 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:37:18 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:38:25 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:40:12 America/New_York] PHP Warning:  fwrite() expects parameter 2 to be string, array given in /home/winonapatrick/git/IT490/dmz/log2.php on line 22
+[08-Mar-2022 22:40:12 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:42:20 America/New_York] PHP Warning:  fwrite() expects parameter 2 to be string, array given in /home/winonapatrick/git/IT490/dmz/log2.php on line 22
+[08-Mar-2022 22:42:20 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:44:07 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:46:19 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:46:37 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:48:10 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:49:07 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:49:07 America/New_York] PHP Warning:  fwrite() expects parameter 2 to be string, array given in /home/winonapatrick/git/IT490/dmz/log2.php on line 22
+[08-Mar-2022 22:49:49 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:49:49 America/New_York] PHP Warning:  fwrite() expects parameter 2 to be string, array given in /home/winonapatrick/git/IT490/dmz/log2.php on line 22
+[08-Mar-2022 22:52:46 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[08-Mar-2022 22:53:09 America/New_York] PHP Notice:  Undefined variable: error2 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[11-Mar-2022 15:21:10 America/New_York] PHP Notice:  Undefined variable: error222 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[11-Mar-2022 15:25:09 America/New_York] PHP Notice:  Undefined variable: error222 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[11-Mar-2022 15:27:22 America/New_York] PHP Notice:  Undefined variable: error222 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[11-Mar-2022 15:30:30 America/New_York] PHP Warning:  fwrite() expects parameter 2 to be string, array given in /home/winonapatrick/git/IT490/dmz/log2.php on line 20
+[11-Mar-2022 15:35:55 America/New_York] PHP Notice:  Undefined variable: error222 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[11-Mar-2022 15:36:05 America/New_York] PHP Warning:  file_put_contents() expects parameter 1 to be a valid path, resource given in /home/winonapatrick/git/IT490/dmz/log2.php on line 20
+[11-Mar-2022 15:38:27 America/New_York] PHP Notice:  Undefined variable: error222 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[11-Mar-2022 15:45:59 America/New_York] PHP Notice:  Undefined variable: error222 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[11-Mar-2022 15:48:57 America/New_York] PHP Notice:  Undefined variable: error222 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[11-Mar-2022 15:50:29 America/New_York] PHP Notice:  Undefined variable: error222 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[11-Mar-2022 15:51:30 America/New_York] PHP Notice:  Undefined variable: error222 in /home/winonapatrick/git/IT490/dmz/testlog.php on line 12
+[11-Mar-2022 15:52:55 America/New_York] PHP Warning:  Illegal string offset 'type' in /home/winonapatrick/git/IT490/dmz/log2.php on line 61
+[11-Mar-2022 15:54:28 America/New_York] PHP Warning:  Illegal string offset 'type' in /home/winonapatrick/git/IT490/dmz/log2.php on line 61
+[11-Mar-2022 15:54:58 America/New_York] PHP Notice:  Undefined variable: error in /home/winonapatrick/git/IT490/dmz/log3.inc on line 30
+[11-Mar-2022 15:54:58 America/New_York] PHP Notice:  Trying to access array offset on value of type null in /home/winonapatrick/git/IT490/dmz/log2.php on line 61
+[11-Mar-2022 15:55:47 America/New_York] PHP Warning:  Illegal string offset 'type' in /home/winonapatrick/git/IT490/dmz/log2.php on line 61
+[11-Mar-2022 15:55:52 America/New_York] PHP Warning:  Illegal string offset 'type' in /home/winonapatrick/git/IT490/dmz/log2.php on line 61
+[14-Mar-2022 14:42:10 America/New_York] PHP Fatal error:  Failed to start request processor: AMQPException: Library error: channel mismatch in /home/winonapatrick/git/IT490/dmz/rabbitMQLib.inc:122
+Stack trace:
+#0 /home/winonapatrick/git/IT490/dmz/rabbitMQLib.inc(122): AMQPQueue->consume()
+#1 /home/winonapatrick/git/IT490/dmz/log2.php(73): rabbitMQServer->process_requests()
+#2 {main} in /home/winonapatrick/git/IT490/dmz/rabbitMQLib.inc on line 132

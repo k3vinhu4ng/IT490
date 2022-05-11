@@ -27,6 +27,6 @@ function logClient($error){
 
 }
 
-logClient('error test');
+logClient('systemd test');
 ?>
 

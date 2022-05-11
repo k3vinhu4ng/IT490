@@ -32,42 +32,38 @@ public function packages($package,$version, $lay, $vm){
         $depkg = $package . $version . ".tar";
 
 	shell_exec('./backup.sh');
-//	shell_exec("./expkg.sh $depkg");
 
 	if ($lay == 'QA'){
-                if ($vm == 'Frontend'){
-                        shell_exec("./deployFEQA.sh $depkg");
+                if ($vm == 'FE'){
+			shell_exec("./deployFEQA.sh $depkg");
+			echo "Pushed to QA - FE".PHP_EOL;
                 }
-                if ($vm == 'Backend'){
-                        shell_exec("./deployDBQA.sh $depkg");
+		elseif ($vm == 'BE'){
+			shell_exec("./deployDBQA.sh $depkg");
+			echo "Pushed to QA - BE".PHP_EOL;
                 }
-                if ($vm == 'API'){
-                        shell_exec("./deployAPIQA.sh $depkg");
+		elseif ($vm == 'API'){
+			shell_exec("./deployAPIQA.sh $depkg");
+			echo "Pushed to QA - API".PHP_EOL;
                 }
 	}
-
-        if ($lay == 'Prod'){
-		$upd = "update packages set status = 'GOOD' where packages = '$package' and version = '$version';";
-        	$updresponse = $this->testdb->query($upd);
-        	echo "Changed status of package to GOOD.".PHP_EOL;
-
-		if ($vm == 'Frontend'){
+	
+	// this probs won't be needed since it would be done in the change function automatically, but i'll leave this here for now....
+	elseif ($lay == 'Prod'){
+		if ($vm == 'FE'){
                         shell_exec("./deployFEProd.sh $depkg");
                 }
-                if ($vm == 'Backend'){
+		elseif ($vm == 'BE'){
                         shell_exec("./deployDBProd.sh $depkg");
                 }
-                if ($vm == 'API'){
+		elseif ($vm == 'API'){
                         shell_exec("./deployAPIProd.sh $depkg");
                 }
         }
 
 }
 
-public function rollback($badpkg, $badver, $lay, $vm){
-//	$sel = "select * from packages where packages = '$badpkg' and version = '$badver';";
-//	$response = $this->testdb->query($sel);
-
+public function rollback($badpkg, $badver, $vm){
 	$upd = "update packages set status = 'BAD' where packages = '$badpkg' and version = '$badver';";
 	$updresponse = $this->testdb->query($upd);
 
@@ -78,25 +74,48 @@ public function rollback($badpkg, $badver, $lay, $vm){
 	$version = $result['version'];
 	$rollpkg = $package . $version . ".tar";
 
-	if ($lay == 'QA'){
-		if ($vm == 'Frontend'){
-			shell_exec("./rollbackFEQA.sh $rollpkg");
-		}
-		if ($vm == 'Backend'){
-			shell_exec("./rollbackDBQA.sh $rollpkg");
-		}
-		if ($vm == 'API'){
-			shell_exec("./rollbackAPIQA.sh $rollpkg");
-		}
-	}	
+	if ($vm == 'FE'){
+		shell_exec("./rollbackFEQA.sh $rollpkg");
+		echo "Rolled back to previous working version.".PHP_EOL;
+	}
+	elseif ($vm == 'BE'){
+		shell_exec("./rollbackDBQA.sh $rollpkg");
+		echo "Rolled back to previous working version.".PHP_EOL;
+	}
+	elseif ($vm == 'API'){
+		shell_exec("./rollbackAPIQA.sh $rollpkg");
+		echo "Rolled back to previous working version.".PHP_EOL;
+	}
+		
 	
 }
 
-public function change($package, $version){
+public function change($package, $version, $vm){
 	// change initial status from TESTING to GOOD 
 	$upd = "update packages set status = 'GOOD' where packages = '$package' and version = '$version';";
 	$updresponse = $this->testdb->query($upd);
 	echo "Changed status of package to GOOD.".PHP_EOL;
+
+	$sel = "select * from packages where packages = '$package' and version = '$version';";
+        $response = $this->testdb->query($sel);
+        $result = mysqli_fetch_array($response);
+        $package = $result['packages'];
+        $version = $result['version'];
+	$depkg = $package . $version . ".tar";
+
+	if ($vm == 'FE'){
+		shell_exec("./deployFEProd.sh $depkg");
+		echo "Deployed to Frontend.".PHP_EOL;
+        }
+        elseif ($vm == 'BE'){
+		shell_exec("./deployDBProd.sh $depkg");
+		echo "Deployed to Backend.".PHP_EOL;
+        }
+        elseif ($vm == 'API'){
+                shell_exec("./deployAPIProd.sh $depkg");
+		echo "Deployed to API.".PHP_EOL;
+	}
+
 
 }
 
