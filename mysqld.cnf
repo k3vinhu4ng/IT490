@@ -28,8 +28,10 @@ tmpdir		= /tmp
 #
 # Instead of skip-networking the default is now to listen only on
 # localhost which is more compatible and is not less secure.
-bind-address		= 127.0.0.1
-mysqlx-bind-address	= 127.0.0.1
+#require_secure_transport=ON
+#bind-address		= 25.51.177.54
+bind-address            = 0.0.0.0
+mysqlx-bind-address	= 0.0.0.0
 #
 # * Fine Tuning
 #
@@ -70,10 +72,10 @@ log_error = /var/log/mysql/error.log
 # The following can be used as easy to replay backup logs or for replication.
 # note: if you are setting up a replication slave, see README.Debian about
 #       other settings you may need to change.
-server-id		= 4
+server-id		= 3
 log_bin			= /var/log/mysql/mysql-bin.log
 # binlog_expire_logs_seconds	= 2592000
 max_binlog_size   = 100M
- binlog_do_db		= bookrex
+binlog_format     = mixed
+binlog_do_db		= bookrex
 # binlog_ignore_db	= include_database_name
-relay-log		= /var/log/mysql/mysql-relay-bin.log
